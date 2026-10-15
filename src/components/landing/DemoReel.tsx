@@ -43,7 +43,7 @@ export function DemoReel() {
             <div className="flex items-center gap-2 border-b-2 border-ink/8 px-3.5 py-2">
               <LogoMark className="size-8" />
               <div className="leading-tight">
-                <p className="font-display text-base font-bold">नाका</p>
+                <p className="font-display text-base font-bold">रोज़घर</p>
                 <p className="text-[0.65rem] font-bold text-muted">घाटकोपर नाका</p>
               </div>
               <span className="ml-auto rounded-full border-2 border-ink bg-marigold px-2 py-0.5 text-[0.7rem] font-bold">हिंदी</span>

@@ -1,0 +1,358 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>RozGhar — Presentation Guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Hind:wght@400;600&family=Khand:wght@600;700&family=Courier+Prime:wght@700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --ink: #161a3d; --paper: #fbf6ec; --sand: #f4ebd9; --marigold: #f5b014; --bus: #c8202f;
+    --leaf: #137a3a; --muted: #545a7a; --line: #e2d5bc;
+  }
+  @page { size: A4; margin: 14mm 14mm 16mm; }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: "Atkinson Hyperlegible", "Hind", system-ui, sans-serif; color: var(--ink); background: white; font-size: 10.5pt; line-height: 1.5; }
+  h1, h2, h3 { font-family: "Khand", "Hind", sans-serif; font-weight: 700; line-height: 1; margin: 0; }
+  h2 { font-size: 26pt; margin: 0 0 8pt; text-shadow: 2px 2px 0 var(--marigold); }
+  h3 { font-size: 15pt; margin: 14pt 0 4pt; }
+  p { margin: 0 0 7pt; }
+  .kicker { font-family: "Courier Prime", monospace; font-weight: 700; color: var(--bus); letter-spacing: .12em; text-transform: uppercase; font-size: 8.5pt; margin-bottom: 4pt; }
+  section { break-before: page; }
+  .cover { break-before: auto; height: 260mm; display: flex; flex-direction: column; justify-content: space-between; background: var(--paper); margin: -14mm -14mm 0; padding: 22mm 18mm; position: relative; overflow: hidden; }
+  .cover .tape { position: absolute; left: 0; right: 0; height: 10px; background: repeating-linear-gradient(-45deg, var(--marigold) 0 12px, var(--ink) 12px 24px); }
+  .brand { display: flex; align-items: center; gap: 12px; font-family: Khand; font-weight: 700; font-size: 30pt; }
+  .brand span.g { color: #c98200; }
+  .cover h1 { font-size: 54pt; text-shadow: 3px 3px 0 var(--marigold); max-width: 150mm; }
+  .tag { display: inline-block; background: var(--bus); color: white; font-family: Hind, sans-serif; font-weight: 600; padding: 3pt 10pt; border-radius: 6px; box-shadow: 3px 3px 0 var(--ink); transform: rotate(-2deg); font-size: 14pt; }
+  .meta { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10pt; }
+  .meta div { border-top: 2px solid var(--ink); padding-top: 6pt; font-size: 9.5pt; }
+  .meta b { display: block; font-family: Khand; font-size: 14pt; }
+  .box { background: var(--sand); border: 2px solid var(--ink); border-radius: 12px; padding: 10pt 12pt; margin: 8pt 0; break-inside: avoid; }
+  .box.dark { background: var(--ink); color: var(--paper); }
+  .box.dark b { color: var(--marigold); }
+  .say { font-style: italic; border-left: 4px solid var(--marigold); padding: 2pt 0 2pt 10pt; margin: 6pt 0; }
+  table { width: 100%; border-collapse: collapse; margin: 6pt 0 10pt; font-size: 9.5pt; break-inside: auto; }
+  th { text-align: left; background: var(--ink); color: var(--paper); font-family: Khand; font-size: 11.5pt; padding: 5pt 7pt; }
+  td { border-bottom: 1px dashed var(--line); padding: 5pt 7pt; vertical-align: top; }
+  tr { break-inside: avoid; }
+  code, .mono { font-family: "Courier Prime", monospace; background: var(--sand); padding: 0 3pt; border-radius: 3px; font-size: 9pt; }
+  figure { margin: 8pt 0 12pt; break-inside: avoid; }
+  figure img { display: block; width: 100%; border: 2px solid var(--ink); border-radius: 10px; }
+  figcaption { font-size: 8.8pt; color: var(--muted); margin-top: 4pt; }
+  .phones { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10pt; margin: 8pt 0 12pt; }
+  .phones.two { grid-template-columns: repeat(2, 1fr); }
+  .phones figure { margin: 0; }
+  .phones img { border-radius: 16px; border-width: 3px; aspect-ratio: 390 / 844; object-fit: cover; object-position: top; }
+  .phones.tall img { aspect-ratio: 390 / 1300; }
+  ol.steps { padding-left: 0; list-style: none; counter-reset: s; }
+  ol.steps > li { counter-increment: s; position: relative; padding: 0 0 8pt 30pt; break-inside: avoid; }
+  ol.steps > li::before { content: counter(s); position: absolute; left: 0; top: 0; width: 20pt; height: 20pt; border-radius: 50%; background: var(--ink); color: var(--paper); font-weight: 700; display: flex; align-items: center; justify-content: center; font-size: 9.5pt; }
+  .qa dt { font-weight: 700; margin-top: 8pt; }
+  .qa dd { margin: 2pt 0 0; }
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 12pt; }
+  .pill { display: inline-block; border: 1.5px solid var(--ink); border-radius: 99px; padding: 0 7pt; font-size: 8.5pt; font-weight: 700; margin: 1pt 2pt 1pt 0; background: white; }
+  .swatches { display: flex; gap: 6pt; margin: 6pt 0; }
+  .sw { flex: 1; border: 2px solid var(--ink); border-radius: 8px; height: 34pt; display: flex; align-items: flex-end; padding: 3pt 5pt; font-size: 8pt; font-weight: 700; }
+  .toc li { margin: 2pt 0; }
+</style>
+</head>
+<body>
+
+<div class="cover">
+  <div class="tape" style="top:0"></div>
+  <div>
+    <div class="brand">
+      <svg width="54" height="54" viewBox="0 0 40 40"><rect width="40" height="40" rx="11" fill="#161a3d"/><circle cx="20" cy="10.2" r="4" fill="#f5b014"/><path d="M7.6 23.6 20 13.4l12.4 10.2" fill="none" stroke="#f5b014" stroke-width="4.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M11.8 21.6v9.6h16.4v-9.6" fill="none" stroke="#f5b014" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M20 31.2v-5.4" stroke="#f5b014" stroke-width="3.4" stroke-linecap="round"/></svg>
+      <div>Roz<span class="g">Ghar</span></div>
+    </div>
+    <p style="margin-top:28mm"><span class="tag">नाके का काम, अब फ़ोन पर</span></p>
+    <h1 style="margin-top:8mm">Presentation &amp; evaluation guide</h1>
+    <p style="font-size:14pt;max-width:150mm;margin-top:8mm">Everything you need to explain RozGhar to the judges: the pitch, how it answers Problem Statement 2, a five-minute demo script, every screen with a photo, the design decisions, and answers to likely questions.</p>
+  </div>
+  <div class="meta">
+    <div><b>Artemis 2026</b>ACM KJSSE · Abhiyantriki, 15–16 Oct</div>
+    <div><b>Problem Statement 2</b>Beyond the Waiting Line</div>
+    <div><b>Frontend prototype</b>Next.js 16 · React 19 · sample data</div>
+  </div>
+  <div class="tape" style="bottom:0"></div>
+</div>
+
+<section>
+  <div class="kicker">Contents</div>
+  <h2>What's in this guide</h2>
+  <ol class="toc">
+    <li>The 30-second pitch</li>
+    <li>How RozGhar answers Problem Statement 2</li>
+    <li>How to run it on presentation day</li>
+    <li>The five-minute demo script</li>
+    <li>Tour: the landing page</li>
+    <li>Tour: the live demo stage</li>
+    <li>Tour: the worker app</li>
+    <li>Tour: Naka Saathi and the employer site</li>
+    <li>Design decisions (typography, colour, motion, inclusion)</li>
+    <li>How it's built</li>
+    <li>Questions judges are likely to ask</li>
+    <li>Honest limits and what comes next</li>
+  </ol>
+
+  <div class="kicker" style="margin-top:16pt">1 · Pitch</div>
+  <h2>The 30-second pitch</h2>
+  <div class="box dark">
+    <p class="say" style="border-color:var(--marigold)">“Every morning, skilled workers across Mumbai stand at roadside <b>nakas</b> hoping someone picks them. Whether a family eats that night depends on who walks past.</p>
+    <p class="say" style="border-color:var(--marigold)">RozGhar puts that naka on their phone. Work nearby with the pay, hours and pay day shown up front. A safety check that flags scams. A Kaam Card instead of a résumé. A pakka agreement both sides keep. And their rights and welfare schemes in plain Hindi or Marathi.</p>
+    <p class="say" style="border-color:var(--marigold)">It works by voice, in three languages, and even on a ₹1,000 button phone by SMS. We didn't build another job portal. We built for irregular work and low digital literacy.”</p>
+  </div>
+  <p><b>The name.</b> <i>RozGhar</i> = <i>roz</i> (daily) + <i>ghar</i> (home), and it sounds like <i>rozgaar</i>, employment. The logo is the day's sun rising over a home: a day's work that keeps a household going.</p>
+</section>
+
+<section>
+  <div class="kicker">2 · Problem statement fit</div>
+  <h2>How RozGhar answers PS2</h2>
+  <p>PS2 asks for a platform that helps hawkers and daily-wage workers find work, showcase skills, connect with employers and access their rights, “without abandoning their existing way of working”, and explicitly <b>not</b> another conventional job portal.</p>
+  <table>
+    <tr><th style="width:24%">PS2 asks for</th><th style="width:46%">What RozGhar does</th><th>Where to show it</th></tr>
+    <tr><td><b>1. Find work more reliably</b><br/>location, hours, pay easy to understand</td><td>“Free for work today?” switch; job feed (list or map) with pay as the biggest number, hours as a sunrise-to-night bar, travel time in minutes, read-aloud on every job; alerts when matching work is posted.</td><td><code>/worker</code>, <code>/worker/job/j1</code></td></tr>
+    <tr><td><b>2. Showcase skills without credentials</b></td><td>Kaam Card: trade, years, work photos (before/after), vouches from the Naka Saathi and past employers, days of work logged, QR code for the toolbox, share on WhatsApp. Made in a minute by voice or by tapping pictures.</td><td><code>/worker/welcome</code>, <code>/worker/card</code></td></tr>
+    <tr><td><b>3. Build trust</b><br/>clear terms before commitment, spot suspicious listings</td><td>Pay, hours and pay day are required to post. Six-point safety check, fair-pay meter, scams called out in plain words and taped off. Pakka agreement with both sides' consent, a stamp, and a payment check afterwards.</td><td><code>/worker/job/j4</code> (scam), agreement page, <code>/employer/post</code></td></tr>
+    <tr><td><b>4. Access rights and support</b></td><td>Four-question eligibility check that names schemes and says why; papers checklist; help centres on a map; tap-to-call helplines; steps for unpaid wages. The Khata counts days toward the welfare board's 90.</td><td><code>/worker/haq</code>, <code>/worker/khata</code></td></tr>
+    <tr><td><b>Inclusive design, limited literacy</b></td><td>Voice onboarding, pictograms for trades, read-aloud everywhere, Hindi/Marathi/English, big targets, bigger-text switch.</td><td>Any worker screen, language switch</td></tr>
+    <tr><td><b>Don't abandon existing ways of working</b></td><td>The naka stays the centre. Button phones get work by SMS (reply 1 or 2). A Naka Saathi registers people with no phone and marks who is present.</td><td><code>/demo</code> → Arjun (SMS), <code>/saathi</code></td></tr>
+  </table>
+</section>
+
+<section>
+  <div class="kicker">3 · Running it</div>
+  <h2>How to run it on presentation day</h2>
+  <ol class="steps">
+    <li>Open a terminal in the project folder: <code>Documents\Naka</code>.</li>
+    <li>First time only: <code>npm.cmd install</code></li>
+    <li>For the smoothest demo, run the production build: <code>npm.cmd run build</code> then <code>npm.cmd start</code>. (For development: <code>npm.cmd run dev</code>.) In Command Prompt you can drop the <code>.cmd</code>.</li>
+    <li>Open <b>http://localhost:3000</b> in Chrome or Edge. Voice features work best there.</li>
+    <li>Before presenting, open <code>/demo</code> and press <b>Reset demo</b>. Demo data lives in the browser (localStorage), so a reset returns everyone to the starting state.</li>
+  </ol>
+  <div class="box">
+    <b>Code on GitHub:</b> <span class="mono">github.com/Rohan0720surana/naka</span> — the redesign is on branch <span class="mono">rozghar-redesign</span>; <span class="mono">main</span> has the first version.<br/>
+    <b>Tip:</b> keep the internet on. Fonts load from Google Fonts and voice recognition needs it; everything else runs locally.
+  </div>
+  <h3>Useful addresses</h3>
+  <table>
+    <tr><th>Address</th><th>What it is</th></tr>
+    <tr><td><code>/</code></td><td>Landing page: product reel, story of a morning at the naka, personas, features</td></tr>
+    <tr><td><code>/demo</code></td><td>Live demo: worker phone, button phone, Naka Saathi and employer site side by side, in sync</td></tr>
+    <tr><td><code>/worker/welcome</code></td><td>Worker onboarding by voice or pictures</td></tr>
+    <tr><td><code>/worker</code></td><td>Worker app (Work, My card, Khata, Rights)</td></tr>
+    <tr><td><code>/saathi</code></td><td>Naka Saathi app</td></tr>
+    <tr><td><code>/employer</code></td><td>Employer site: dashboard, post work, find workers</td></tr>
+  </table>
+  <p>Every app page has a <b>home / Main site</b> button back to the landing page (hidden inside the demo frames so the demo doesn't navigate away).</p>
+</section>
+
+<section>
+  <div class="kicker">4 · Demo script</div>
+  <h2>The five-minute demo</h2>
+  <p>Run this on <code>/demo</code> on a laptop. The left device is Ramesh's phone, the right window is Priya's employer site. Anything done on one side appears on the other instantly.</p>
+  <ol class="steps">
+    <li><b>Set the scene (30 s).</b> On the landing page, scroll through “one morning at the naka”: the clock moves, the crowd thins, a car picks three men with nothing written down.<div class="say">“This is the problem. Work depends on luck, skill is invisible, terms are verbal, rights are far away.”</div></li>
+    <li><b>Post work as Priya (45 s).</b> In the employer window: Post work → Painter → Next → Next → choose <b>Same day</b> pay → Publish. Point at the live preview switching between हिंदी / मराठी / English and the safety check that stays at “Be careful” until a pay day is chosen.<div class="say">“Employers can't post vague work. Pay, hours and pay day are required.”</div></li>
+    <li><b>Ramesh gets it (60 s).</b> On the phone an alert drops in, in his language. Open it: big pay, hours bar, map, what's given, fair-pay meter, safety check. Tap <b>Listen</b> to hear it read aloud. Tap <b>I want this work</b> → the deal sheet → <b>Yes, send</b>.</li>
+    <li><b>Make it pakka (40 s).</b> Employer dashboard → <b>Confirm</b>. Both screens show the same agreement code and the PAKKA stamp lands.<div class="say">“Both sides hold the same agreement. If pay doesn't come, this is proof.”</div></li>
+    <li><b>Pay and log (40 s).</b> Employer: <b>Mark work done &amp; paid</b>. Ramesh: <b>Yes, I got it</b> → coins drop into his Kamai Khata, and his days move toward the welfare board's 90.</li>
+    <li><b>No smartphone (45 s).</b> Switch the left device to <b>Arjun (SMS)</b>. Show the Hindi job alert and press <b>1</b>. A “Pakka!” SMS arrives.<div class="say">“We didn't leave out the people who most need this.”</div></li>
+    <li><b>Close with a scam (30 s).</b> On the worker app open the “Painters needed in Dubai” job: red banner, hazard tape, “Asks you to pay ₹15,000 first”. Switch the language to हिंदी to finish.</li>
+  </ol>
+</section>
+
+<section>
+  <div class="kicker">5 · Landing page</div>
+  <h2>Tour: the landing page</h2>
+  <p>Built to look like a Mumbai street, not a SaaS template: hand-painted signboard lettering, a Hindi poster tag, paper texture, BEST-bus red, and hazard-tape stripes.</p>
+  <figure><img src="img/01-hero.jpg" /><figcaption><b>Hero.</b> Signboard headline, a Hindi poster tag (“naka work, now on the phone”), and an autoplaying walkthrough of the real worker app inside an Android phone. A BEST bus and an auto-rickshaw drive along the skyline; a red bar under the nav shows scroll progress.</figcaption></figure>
+  <figure><img src="img/02-hero-reel.jpg" /><figcaption><b>The reel</b> cycles through five moments with captions: free today → job alert in Hindi → pay and safety check → PAKKA stamp → paid and logged. It has a pause button and stops for users who prefer reduced motion.</figcaption></figure>
+</section>
+
+<section>
+  <figure><img src="img/03-story-start.jpg" /><figcaption><b>“Without RozGhar · one morning”.</b> A sticky scroll story. As you scroll, the clock and sun move from 6:30 AM to 1 PM, the sky turns harsh, birds and clouds drift.</figcaption></figure>
+  <figure><img src="img/04-story-car.jpg" /><figcaption>At 8:15 a contractor's car arrives and picks three men, with nothing written down. The station clock's hands turn with the story.</figcaption></figure>
+  <figure><img src="img/05-story-end.jpg" /><figcaption>By 1 PM one man is left. The button leads into the solution: “RozGhar changes how this morning ends”.</figcaption></figure>
+</section>
+
+<section>
+  <figure><img src="img/06-personas.jpg" /><figcaption><b>Four people, one naka.</b> Hand-drawn portraits of Ramesh (painter), Arjun (no smartphone), Priya (home owner) and Sunil (Naka Saathi), with their words in their own language in handwriting, and what RozGhar does for each.</figcaption></figure>
+  <figure><img src="img/07-posters.jpg" /><figcaption><b>Poster wall.</b> Key numbers pasted on a wall with tape and torn edges; they swing in and count up when they come into view.</figcaption></figure>
+</section>
+
+<section>
+  <figure><img src="img/08-features-a.jpg" /><figcaption><b>What changes with RozGhar.</b> Every tile is the real app component, not a mock-up: a job card next to a scam listing that's been taped off, and the Kaam Card.</figcaption></figure>
+  <figure><img src="img/09-features-b.jpg" /><figcaption>The pakka chit with its stamp, the four-tap rights check, and the SMS conversation for button phones.</figcaption></figure>
+</section>
+
+<section>
+  <figure><img src="img/10-design.jpg" /><figcaption><b>Not another job portal.</b> The six design rules, and a side-by-side ledger of a typical job portal versus RozGhar.</figcaption></figure>
+  <figure><img src="img/11-cta.jpg" /><figcaption><b>Call to action.</b> A torn poster on a red wall, with the employer site in a laptop and a Hindi offer arriving on a phone.</figcaption></figure>
+</section>
+
+<section>
+  <div class="kicker">6 · Live demo</div>
+  <h2>Tour: the live demo stage</h2>
+  <figure><img src="img/12-demo.jpg" /><figcaption><b>/demo.</b> A five-step guide on top; Ramesh's phone (or Arjun's button phone, or the Saathi app) on the left; Priya's employer site in a browser window on the right. They share one store, so actions sync instantly. <b>Reset demo</b> returns to the start.</figcaption></figure>
+  <figure><img src="img/13-demo-sms.jpg" /><figcaption><b>Arjun's button phone.</b> Work arrives by SMS in Hindi (with an English translation shown for judges). Pressing 1 asks for the job; the contractor's “Pakka!” reply follows with the agreement number.</figcaption></figure>
+</section>
+
+<section>
+  <div class="kicker">7 · Worker app</div>
+  <h2>Tour: the worker app</h2>
+  <h3>Onboarding without typing</h3>
+  <div class="phones">
+    <figure><img src="img/20-onboard-lang.jpg" /><figcaption>Choose a language first, in all three scripts.</figcaption></figure>
+    <figure><img src="img/21-onboard-welcome.jpg" /><figcaption>Welcome in Hindi, read aloud; choose to speak or tap pictures.</figcaption></figure>
+    <figure><img src="img/22-onboard-voice.jpg" /><figcaption>Say “painter, 12 years, Ghatkopar naka”; the form fills itself. “Play example” works without a mic.</figcaption></figure>
+  </div>
+  <div class="phones">
+    <figure><img src="img/23-onboard-trade.jpg" /><figcaption>Or tap a hand-drawn tool for each trade.</figcaption></figure>
+    <figure><img src="img/24-worker-home.jpg" /><figcaption>Home: “Free for work today?” The naka scene fills with people when it's on.</figcaption></figure>
+    <figure><img src="img/25-worker-home-hi.jpg" /><figcaption>The same screen in Hindi. Every string exists in Hindi, Marathi and English.</figcaption></figure>
+  </div>
+</section>
+
+<section>
+  <h3>Finding work</h3>
+  <div class="phones">
+    <figure><img src="img/26-worker-feed.jpg" /><figcaption>Job cards: pay first, then hours, start day, place and travel time, with a safety badge. Scams sort last and get taped off.</figcaption></figure>
+    <figure><img src="img/27-worker-map.jpg" /><figcaption>Map view of the same work around the naka.</figcaption></figure>
+    <figure><img src="img/29-scam.jpg" /><figcaption>A scam listing: red banner with hazard stripes that shakes once, and plain advice.</figcaption></figure>
+  </div>
+  <div class="phones tall two">
+    <figure><img src="img/28-job-detail.jpg" /><figcaption><b>Job detail.</b> Pay and total, hours bar, map, what's given (ticked or crossed), the note, the fair-pay meter, the six safety checks and the employer's record. “Listen” reads all of it aloud.</figcaption></figure>
+    <figure><img src="img/30-scam-checks.jpg" /><figcaption><b>Why it's a scam, in words:</b> asks for ₹15,000 first, pay 6.5× the usual rate, job abroad (check eMigrate), unverified phone, no exact address. Report it or ask the Naka Saathi.</figcaption></figure>
+  </div>
+</section>
+
+<section>
+  <h3>The pakka agreement</h3>
+  <div class="phones tall two">
+    <figure><img src="img/31-agreement-sheet.jpg" /><figcaption>Before saying yes, the worker sees every term on one chit, and can hear it read aloud.</figcaption></figure>
+    <figure><img src="img/32-agreement-pakka.jpg" /><figcaption>Once both agree, the PAKKA stamp thumps on. Steps track Asked → Pakka → Work done → Paid; “Not paid” opens a complaint path with legal-aid numbers.</figcaption></figure>
+  </div>
+  <h3>Kaam Card and Kamai Khata</h3>
+  <div class="phones tall two">
+    <figure><img src="img/33-kaam-card.jpg" /><figcaption><b>Kaam Card.</b> A visiting card with QR, rating, jobs and days logged, skills, before/after slider of real work, and vouches.</figcaption></figure>
+    <figure><img src="img/34-khata.jpg" /><figcaption><b>Kamai Khata.</b> Earnings this month (coins drop in), money still owed with a “Get help” route, a 30-day calendar, and progress to the welfare board's 90 days.</figcaption></figure>
+  </div>
+</section>
+
+<section>
+  <h3>Rights, schemes and language</h3>
+  <div class="phones">
+    <figure><img src="img/35-haq.jpg" /><figcaption>Rights home: start the four-tap check.</figcaption></figure>
+    <figure><img src="img/36-haq-results.jpg" /><figcaption>Results say <i>why</i> each scheme fits: e-Shram, welfare board, pension, Ayushman, insurance…</figcaption></figure>
+    <figure><img src="img/37-language.jpg" /><figcaption>Switch language anywhere; the choice is spoken back.</figcaption></figure>
+  </div>
+  <p>Further down the Rights page: a papers checklist (what you have vs what each scheme needs), help centres on a map, tap-to-call helplines (14434 e-Shram, 15100 legal aid, 14555 Ayushman, 181 women, 112 emergency) and steps for unpaid wages.</p>
+</section>
+
+<section>
+  <div class="kicker">8 · Saathi and employers</div>
+  <h2>Tour: Naka Saathi and the employer site</h2>
+  <div class="phones tall two">
+    <figure><img src="img/38-saathi.jpg" /><figcaption><b>Naka Saathi.</b> One helper with a smartphone marks who's at the naka today, registers new workers, and sends matching work by SMS, or reads it out to people with no phone.</figcaption></figure>
+    <div>
+      <div class="box"><b>Why this matters:</b> PS2 says “without abandoning their existing way of working”. Many workers have no smartphone at all. The Saathi and SMS paths mean the naka itself becomes connected, not just the people who own phones.</div>
+    </div>
+  </div>
+  <figure><img src="img/40-employer.jpg" /><figcaption><b>Employer dashboard.</b> Requests and agreements with one-click Confirm, Mark done &amp; paid, and ratings; open jobs; why listings are clear.</figcaption></figure>
+</section>
+
+<section>
+  <figure><img src="img/42-post-pay.jpg" /><figcaption><b>Post work, step 3.</b> Live preview of how workers will see the job, in हिंदी / मराठी / English; the fair-pay meter for the trade; required pay day; and the same safety check workers see. Listings that look like scams can't be published.</figcaption></figure>
+  <figure><img src="img/43-workers.jpg" /><figcaption><b>Find workers.</b> Filter by trade and “free today”; each card shows rating, jobs, distance, phone type (app, SMS only, via Saathi) and expected rate. “Scan a Kaam Card” simulates scanning a worker's QR at the naka.</figcaption></figure>
+</section>
+
+<section>
+  <figure><img src="img/44-profile.jpg" /><figcaption><b>Worker profile for employers.</b> The Kaam Card, vouches and work photos, and an offer panel that shows the exact agreement before sending. Offers to button-phone workers go by SMS.</figcaption></figure>
+
+  <div class="kicker" style="margin-top:12pt">9 · Design</div>
+  <h2>Design decisions</h2>
+  <div class="two-col">
+    <div>
+      <h3>Typography</h3>
+      <p><span class="pill">Khand</span> condensed signboard headings in both scripts · <span class="pill">Atkinson Hyperlegible</span> body text, made for low-vision readers · <span class="pill">Hind</span> for Hindi/Marathi · <span class="pill">Yatra One</span> Hindi poster lines · <span class="pill">Kalam</span> handwriting for people's own words · <span class="pill">Courier Prime</span> typewriter for agreements.</p>
+      <h3>Colour</h3>
+      <div class="swatches">
+        <div class="sw" style="background:#161a3d;color:#fbf6ec">Ink</div>
+        <div class="sw" style="background:#f5b014">Marigold</div>
+        <div class="sw" style="background:#137a3a;color:white">Leaf</div>
+        <div class="sw" style="background:#c8202f;color:white">Bus red</div>
+        <div class="sw" style="background:#fbf6ec">Paper</div>
+      </div>
+      <p>Ink for trust, marigold for action, leaf for fair/verified, red only for warnings and decoration. Every status uses colour <i>and</i> an icon <i>and</i> a word.</p>
+    </div>
+    <div>
+      <h3>Motion with meaning</h3>
+      <p>The naka fills up when you're free; a rubber stamp seals a deal; hazard tape slaps across a scam; coins drop into the Khata; the story's clock moves as you scroll; a BEST bus crosses the skyline. All motion respects “reduce motion” settings, and the reel can be paused.</p>
+      <h3>Inclusion</h3>
+      <p>Voice in and voice out; pictures before words; three languages; 44–48 px touch targets; strong contrast for sunlight; bigger-text switch; nothing hidden behind hover; keyboard focus rings; screen-reader labels; works on a 360 px phone.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="kicker">10 · Under the hood</div>
+  <h2>How it's built</h2>
+  <table>
+    <tr><th style="width:28%">Part</th><th>Choice and why</th></tr>
+    <tr><td>Framework</td><td>Next.js 16 (App Router), React 19, TypeScript. Builds as a static-first site, deployable to Vercel.</td></tr>
+    <tr><td>Styling</td><td>Tailwind CSS 4 with design tokens (colours, shadows, fonts) in one stylesheet.</td></tr>
+    <tr><td>Motion</td><td>Framer Motion for every animation; Magic UI Marquee and Number Ticker components.</td></tr>
+    <tr><td>Shared demo state</td><td>Zustand store persisted to localStorage. Separate frames (worker phone, employer site, SMS phone) stay in sync through <code>storage</code> events: that's how the two-sided demo works with no backend.</td></tr>
+    <tr><td>Languages</td><td>A typed dictionary of ~300 strings in English, Hindi and Marathi; job text is generated from structured fields, so new jobs appear in every language.</td></tr>
+    <tr><td>Voice</td><td>Browser Web Speech API: speech synthesis for read-aloud (Marathi falls back to a Hindi voice) and speech recognition for onboarding, with a parser for trade, years (digits or number words in 3 languages) and naka.</td></tr>
+    <tr><td>Safety check</td><td>Rule-based: advance fee, kept documents, pay far above or below the usual range for the trade and unit, unclear pay day, unverified phone, vague location, jobs abroad.</td></tr>
+    <tr><td>Fair-pay meter</td><td>Usual day rates per trade (sample Mumbai data), converted for per-job and monthly pay.</td></tr>
+    <tr><td>Art</td><td>All illustrations (portraits, naka scenes, trade pictograms, bus, stamp) are hand-written SVG: crisp, tiny and themeable.</td></tr>
+  </table>
+</section>
+
+<section>
+  <div class="kicker">11 · Q&amp;A prep</div>
+  <h2>Questions judges are likely to ask</h2>
+  <dl class="qa">
+    <dt>How is this different from a job portal like Apna or Naukri?</dt>
+    <dd>No résumé, no typing, no English required. It starts from the naka people already use, adds clear terms and scam protection, and keeps a record (agreement + Khata) that helps with pay disputes and welfare registration. It even works without a smartphone.</dd>
+    <dt>How do workers with low literacy use it?</dt>
+    <dd>Language is chosen first; onboarding is by voice or pictures; every job, agreement and scheme can be read aloud; trades are pictograms; numbers are big; there's a bigger-text switch.</dd>
+    <dt>What about people without smartphones?</dt>
+    <dd>SMS in Hindi with one-key replies (1 yes, 2 no, 0 help), and the Naka Saathi who registers and represents them. Show it on <code>/demo</code> → Arjun.</dd>
+    <dt>How do you detect scams?</dt>
+    <dd>A transparent rule set, explained in words: money asked from the worker, documents kept, pay several times the local rate, unclear pay day, unverified phone, vague address, jobs abroad (check eMigrate). Employers see the same check while posting.</dd>
+    <dt>How would you verify employers and workers in a real launch?</dt>
+    <dd>Phone OTP for both, masked calling, ratings tied to completed agreements, and vouches from Naka Saathis who know people personally. Aadhaar-based e-Shram linking could be optional.</dd>
+    <dt>Where does the data come from? Is there a backend?</dt>
+    <dd>PS2 allows mock data; this is a frontend prototype. All people, jobs and centres are sample data; the helpline numbers are real. The state model (jobs, agreements, Khata, SMS) is ready to be backed by an API.</dd>
+    <dt>Why should a worker trust the pakka agreement?</dt>
+    <dd>Both parties see identical terms before agreeing, it's timestamped with a code, shareable on WhatsApp, and the payment is confirmed by the worker. If pay doesn't arrive it becomes evidence for legal aid (15100).</dd>
+    <dt>How does it scale beyond Mumbai?</dt>
+    <dd>Nakas, areas and rates are data. Adding a city means adding its nakas and rate ranges; adding a language means one more dictionary column (Bengali, Tamil, Telugu, Gujarati are marked “soon”).</dd>
+    <dt>Is it accessible?</dt>
+    <dd>Semantic HTML, labelled controls, visible focus, 4.5:1 contrast, reduced-motion support, screen-reader-only text for visual-only elements, and no horizontal scrolling on phones.</dd>
+  </dl>
+</section>
+
+<section>
+  <div class="kicker">12 · Limits</div>
+  <h2>Honest limits and what comes next</h2>
+  <ul>
+    <li>Prototype on sample data; no server, payments or real OTP.</li>
+    <li>Voice recognition depends on the browser (best in Chrome/Edge) and needs internet; read-aloud works offline in most browsers.</li>
+    <li>Hindi and Marathi text should be reviewed by native speakers; scheme amounts should be checked against official sources before launch.</li>
+    <li>Next: a real backend and SMS gateway (e.g. via a telecom API), employer verification, UPI payment confirmation, more languages, an IVR line for people who can't read SMS, and a pilot at one naka with a Saathi.</li>
+  </ul>
+  <div class="box dark" style="margin-top:16pt">
+    <p style="font-family:Hind;font-size:16pt;color:var(--marigold);margin:0">काम मिलेगा, इज़्ज़त से।</p>
+    <p style="margin:2pt 0 0">Work will come, with dignity.</p>
+  </div>
+</section>
+
+</body>
+</html>
