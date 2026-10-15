@@ -27,9 +27,9 @@ import { SpeakButton } from "@/components/SpeakButton";
 import { Button, Card, Notice, SectionTitle, Tag } from "@/components/ui/primitives";
 import { DOCS, HELP_CENTRES, HELPLINES, SCHEMES, type DocId, type Scheme } from "@/lib/data/schemes";
 import { useT } from "@/lib/hooks";
-import type { TKey } from "@/lib/i18n";
+import { pick, translate, type TKey } from "@/lib/i18n";
 import { useDemo } from "@/lib/store";
-import type { EligibilityAnswers } from "@/lib/types";
+import type { EligibilityAnswers, Lang } from "@/lib/types";
 import { cn } from "@/lib/utils";
 
 const KIND_ICON: Record<Scheme["kind"], typeof IdCard> = {
@@ -80,7 +80,7 @@ export default function HaqPage() {
           <h1 className="font-display text-[1.75rem] leading-tight font-extrabold">{t("haqTitle")}</h1>
           <p className="text-muted">{t("haqSub")}</p>
         </div>
-        <SpeakButton text={`${t("haqTitle")}. ${t("haqSub")}`} compact />
+        <SpeakButton say={(l) => `${translate(l, "haqTitle")}. ${translate(l, "haqSub")}`} compact />
       </header>
 
       <EligibilityCheck onOpen={setOpen} matched={matched} />
@@ -303,7 +303,7 @@ function EligibilityCheck({
         <motion.div key={step} initial={{ opacity: 0, x: 24 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -24 }} transition={{ duration: 0.22 }}>
           <div className="flex items-start justify-between gap-2">
             <h2 className="font-display text-[1.35rem] leading-tight font-extrabold">{t(q.key)}</h2>
-            <SpeakButton text={[t(q.key), ...q.options.map((o) => t(o.key))].join(". ")} compact />
+            <SpeakButton say={(l) => [translate(l, q.key), ...q.options.map((o) => translate(l, o.key))].join(". ")} compact />
           </div>
           <div className="mt-4 grid gap-2">
             {q.options.map((o) => (
@@ -372,7 +372,14 @@ function SchemeSheet({ scheme, onClose }: { scheme: Scheme | null; onClose: () =
   const toggleScheme = useDemo((s) => s.toggleScheme);
   if (!scheme) return <Sheet open={false} onClose={onClose} title="">{null}</Sheet>;
   const Icon = KIND_ICON[scheme.kind];
-  const spoken = [p(scheme.name), p(scheme.short), `${t("whoCan")}: ${p(scheme.who)}`, `${t("whatYouGet")}: ${p(scheme.get)}`, `${t("whereApply")}: ${p(scheme.where)}`].join(". ");
+  const spoken = (l: Lang) =>
+    [
+      pick(scheme.name, l),
+      pick(scheme.short, l),
+      `${translate(l, "whoCan")}: ${pick(scheme.who, l)}`,
+      `${translate(l, "whatYouGet")}: ${pick(scheme.get, l)}`,
+      `${translate(l, "whereApply")}: ${pick(scheme.where, l)}`,
+    ].join(". ");
   return (
     <Sheet open={!!scheme} onClose={onClose} title={p(scheme.name)} closeLabel={t("close")}>
       <div className="space-y-4">
@@ -380,7 +387,7 @@ function SchemeSheet({ scheme, onClose }: { scheme: Scheme | null; onClose: () =
           <Icon className="size-9 shrink-0 text-sky" aria-hidden="true" />
           <p className="font-display text-lg leading-tight font-extrabold">{p(scheme.benefit)}</p>
         </div>
-        <SpeakButton text={spoken} className="w-full" />
+        <SpeakButton say={spoken} className="w-full" />
         {[
           { k: "whoCan" as const, v: p(scheme.who) },
           { k: "whatYouGet" as const, v: p(scheme.get) },

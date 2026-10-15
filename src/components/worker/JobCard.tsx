@@ -77,7 +77,7 @@ export function JobCard({
               <span className="truncate">{employer?.name}</span>
             </p>
           </div>
-          {preview ? null : <SpeakButton text={jobSpeech(job, lang)} compact />}
+          {preview ? null : <SpeakButton say={(l) => jobSpeech(job, l)} compact />}
         </div>
 
         <div className="mt-3 flex items-baseline gap-2">

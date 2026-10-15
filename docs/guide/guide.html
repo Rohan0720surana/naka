@@ -136,6 +136,9 @@
     <b>Code on GitHub:</b> <span class="mono">github.com/Rohan0720surana/naka</span> — the redesign is on branch <span class="mono">rozghar-redesign</span>; <span class="mono">main</span> has the first version.<br/>
     <b>Tip:</b> keep the internet on. Fonts load from Google Fonts and voice recognition needs it; everything else runs locally.
   </div>
+  <div class="box dark">
+    <b>Voice on presentation day:</b> use <b>Microsoft Edge</b> if you can. It ships natural Hindi and Marathi voices (Swara, Aarohi), so “Listen” reads in the worker's language. Chrome has a Google Hindi voice but no Marathi one; Marathi is then read by the Hindi voice (same script). On a device with <i>no</i> Hindi/Marathi voice, RozGhar reads the same content in English and shows a short note saying so, instead of garbling Devanagari. The microphone asks for permission the first time; if it's blocked, the screen says how to allow it, and “Play example” always works.
+  </div>
   <h3>Useful addresses</h3>
   <table>
     <tr><th>Address</th><th>What it is</th></tr>
@@ -344,7 +347,7 @@
   <h2>Honest limits and what comes next</h2>
   <ul>
     <li>Prototype on sample data; no server, payments or real OTP.</li>
-    <li>Voice recognition depends on the browser (best in Chrome/Edge) and needs internet; read-aloud works offline in most browsers.</li>
+    <li>Voice recognition depends on the browser (best in Chrome/Edge) and needs internet. Read-aloud uses the voices installed on the device: Edge has natural Hindi and Marathi voices; elsewhere RozGhar falls back to English and says so.</li>
     <li>Hindi and Marathi text should be reviewed by native speakers; scheme amounts should be checked against official sources before launch.</li>
     <li>Next: a real backend and SMS gateway (e.g. via a telecom API), employer verification, UPI payment confirmation, more languages, an IVR line for people who can't read SMS, and a pilot at one naka with a Saathi.</li>
   </ul>

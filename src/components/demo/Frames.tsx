@@ -29,7 +29,7 @@ export function PhoneFrame({
         <div className="pointer-events-none absolute top-0 inset-x-0 z-10 flex h-7 items-center justify-center bg-paper" aria-hidden="true">
           <span className="size-3.5 rounded-full bg-[#0f1230]" />
         </div>
-        <iframe key={frameKey} src={src} title={title} className="size-full border-0 pt-7" />
+        <iframe key={frameKey} src={src} title={title} allow="microphone; autoplay" className="size-full border-0 pt-7" />
       </div>
     </div>
   );
@@ -67,7 +67,7 @@ export function BrowserFrame({
           </button>
         ) : null}
       </div>
-      <iframe key={frameKey} src={src} title={title} className="h-[min(780px,calc(100dvh-300px))] min-h-[520px] w-full border-0" />
+      <iframe key={frameKey} src={src} title={title} allow="microphone; autoplay" className="h-[min(780px,calc(100dvh-300px))] min-h-[520px] w-full border-0" />
     </div>
   );
 }

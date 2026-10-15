@@ -6,45 +6,222 @@ import { speechCode } from "@/lib/i18n";
 import type { Lang, TradeId } from "@/lib/types";
 
 export function canSpeak(): boolean {
-  return typeof window !== "undefined" && "speechSynthesis" in window;
+  return typeof window !== "undefined" && "speechSynthesis" in window && typeof SpeechSynthesisUtterance !== "undefined";
 }
 
-/** Reads text aloud in the worker's language. Marathi falls back to a Hindi voice. */
-export function speak(text: string, lang: Lang, onEnd?: () => void): boolean {
-  if (!canSpeak()) return false;
+/* ----------------------------- voice catalogue ----------------------------- */
+
+let voices: SpeechSynthesisVoice[] = [];
+
+function refreshVoices() {
+  if (canSpeak()) voices = window.speechSynthesis.getVoices();
+}
+
+if (canSpeak()) {
+  refreshVoices();
+  window.speechSynthesis.addEventListener?.("voiceschanged", refreshVoices);
+}
+
+/** Browsers load voices lazily: the list is empty until `voiceschanged` fires. */
+function voicesReady(): Promise<void> {
+  refreshVoices();
+  if (voices.length > 0 || !canSpeak()) return Promise.resolve();
+  return new Promise((resolve) => {
+    const done = () => {
+      refreshVoices();
+      resolve();
+    };
+    window.speechSynthesis.addEventListener?.("voiceschanged", done, { once: true });
+    setTimeout(done, 1200);
+  });
+}
+
+/** Which voice languages to try, in order. Marathi can be read by a Hindi voice: same script. */
+const VOICE_ORDER: Record<Lang, string[]> = {
+  hi: ["hi-in", "hi"],
+  mr: ["mr-in", "mr", "hi-in", "hi"],
+  en: ["en-in", "en-gb", "en-us", "en"],
+};
+
+/** Prefer natural-sounding voices (Edge "Natural", Google) over robotic ones. */
+function quality(v: SpeechSynthesisVoice): number {
+  const n = v.name.toLowerCase();
+  return (n.includes("natural") ? 4 : 0) + (n.includes("google") ? 3 : 0) + (n.includes("online") ? 1 : 0);
+}
+
+export function findVoice(lang: Lang): SpeechSynthesisVoice | null {
+  for (const code of VOICE_ORDER[lang]) {
+    const matches = voices.filter((v) => v.lang.replace("_", "-").toLowerCase().startsWith(code));
+    if (matches.length) return matches.sort((a, b) => quality(b) - quality(a))[0]!;
+  }
+  return null;
+}
+
+/** True when the device can read this language aloud with a proper voice. */
+export function hasVoiceFor(lang: Lang): boolean {
+  return findVoice(lang) !== null;
+}
+
+/* ------------------------------ text clean-up ------------------------------ */
+
+const WORDS: Record<Lang, { rupees: string; to: string; km: string }> = {
+  en: { rupees: "rupees", to: " to ", km: " kilometres" },
+  hi: { rupees: "रुपये", to: " से ", km: " किलोमीटर" },
+  mr: { rupees: "रुपये", to: " ते ", km: " किलोमीटर" },
+};
+
+/** Turns screen text into something a voice reads naturally: no symbols, no dashes. */
+export function toSpeakable(text: string, lang: Lang): string {
+  const w = WORDS[lang];
+  return text
+    .replace(/₹\s?([\d,]+)/g, (_, n: string) => `${n} ${w.rupees}`)
+    .replace(/₹/g, ` ${w.rupees} `)
+    .replace(/\s*–\s*/g, w.to)
+    .replace(/\s*—\s*/g, ", ")
+    .replace(/\s*·\s*/g, ", ")
+    .replace(/[→↗★✓✗“”"]/g, "")
+    .replace(/(\d)\s?km\b/g, `$1${w.km}`)
+    .replace(/\s+([,.।?!])/g, "$1")
+    .replace(/([?!।.])[.।]+/g, "$1")
+    .replace(/\s{2,}/g, " ")
+    .trim();
+}
+
+/**
+ * Long utterances get cut off in Chrome after ~15 seconds, so text is read
+ * sentence by sentence.
+ */
+function chunk(text: string): string[] {
+  const sentences = text.split(/(?<=[.!?।])\s+/).filter(Boolean);
+  const out: string[] = [];
+  let cur = "";
+  for (const s of sentences) {
+    if (s.length > 220) {
+      if (cur) out.push(cur);
+      cur = "";
+      out.push(...s.split(/(?<=,)\s+/));
+      continue;
+    }
+    if ((cur + " " + s).trim().length > 160) {
+      if (cur) out.push(cur);
+      cur = s;
+    } else cur = (cur + " " + s).trim();
+  }
+  if (cur) out.push(cur);
+  return out;
+}
+
+/* ------------------------------- speaking -------------------------------- */
+
+let activeId: string | null = null;
+let session = 0;
+const listeners = new Set<() => void>();
+
+function setActive(id: string | null) {
+  activeId = id;
+  listeners.forEach((l) => l());
+}
+
+export function subscribeSpeech(listener: () => void) {
+  listeners.add(listener);
+  return () => {
+    listeners.delete(listener);
+  };
+}
+
+/** Which Listen button is currently speaking, if any. */
+export function getActiveSpeech() {
+  return activeId;
+}
+
+export interface SpeakResult {
+  ok: boolean;
+  /** The language actually spoken. */
+  lang: Lang;
+  /** True when the device had no voice for the requested language and English was used instead. */
+  fellBack: boolean;
+}
+
+/**
+ * Reads text aloud in the worker's language. `say` builds the text for a
+ * language, so if the device has no Hindi or Marathi voice the same content
+ * can be read in English instead of an English voice mangling Devanagari.
+ */
+export async function speakAs(id: string, say: (lang: Lang) => string, lang: Lang, onEnd?: () => void): Promise<SpeakResult> {
+  if (!canSpeak()) return { ok: false, lang, fellBack: false };
   const synth = window.speechSynthesis;
   synth.cancel();
-  const u = new SpeechSynthesisUtterance(text);
-  const code = speechCode(lang);
-  u.lang = code;
-  const voices = synth.getVoices();
-  const voice =
-    voices.find((v) => v.lang === code) ??
-    voices.find((v) => v.lang.startsWith(code.slice(0, 2))) ??
-    (lang === "mr" ? voices.find((v) => v.lang.startsWith("hi")) : undefined);
-  if (voice) u.voice = voice;
-  u.rate = 0.92;
-  u.onend = () => onEnd?.();
-  u.onerror = () => onEnd?.();
-  synth.speak(u);
-  return true;
+  const mine = ++session;
+  setActive(id);
+  await voicesReady();
+  if (mine !== session) return { ok: true, lang, fellBack: false };
+
+  let useLang = lang;
+  let voice = findVoice(lang);
+  let fellBack = false;
+  if (!voice && lang !== "en" && voices.length > 0) {
+    const en = findVoice("en");
+    if (en) {
+      voice = en;
+      useLang = "en";
+      fellBack = true;
+    }
+  }
+
+  const parts = chunk(toSpeakable(say(useLang), useLang));
+  if (parts.length === 0) {
+    setActive(null);
+    return { ok: false, lang: useLang, fellBack };
+  }
+  const finish = () => {
+    if (mine !== session) return;
+    setActive(null);
+    onEnd?.();
+  };
+  parts.forEach((part, i) => {
+    const u = new SpeechSynthesisUtterance(part);
+    if (voice) {
+      u.voice = voice;
+      u.lang = voice.lang;
+    } else u.lang = speechCode(useLang);
+    u.rate = useLang === "en" ? 0.95 : 0.9;
+    if (i === parts.length - 1) u.onend = finish;
+    u.onerror = (e) => {
+      if (e.error !== "interrupted" && e.error !== "canceled") finish();
+    };
+    synth.speak(u);
+  });
+  // Chrome occasionally leaves the queue paused after a cancel.
+  synth.resume();
+  return { ok: true, lang: useLang, fellBack };
+}
+
+/** Fire-and-forget speech for small confirmations (language picked, trade tapped). */
+export function speak(say: (lang: Lang) => string, lang: Lang, onEnd?: () => void): void {
+  void speakAs("auto", say, lang, onEnd);
 }
 
 export function stopSpeaking() {
+  session++;
+  setActive(null);
   if (canSpeak()) window.speechSynthesis.cancel();
 }
 
 /* ------------------------- speech recognition ------------------------- */
 
+export type RecognitionError = "denied" | "no-speech" | "network" | "unsupported" | "other";
+
 interface RecognitionLike {
   lang: string;
   interimResults: boolean;
   continuous: boolean;
+  maxAlternatives: number;
   onresult: ((e: { results: ArrayLike<ArrayLike<{ transcript: string }> & { isFinal: boolean }> }) => void) | null;
-  onerror: ((e: unknown) => void) | null;
+  onerror: ((e: { error?: string }) => void) | null;
   onend: (() => void) | null;
   start: () => void;
   stop: () => void;
+  abort?: () => void;
 }
 
 export function getRecognition(lang: Lang): RecognitionLike | null {
@@ -59,7 +236,16 @@ export function getRecognition(lang: Lang): RecognitionLike | null {
   r.lang = speechCode(lang);
   r.interimResults = true;
   r.continuous = false;
+  r.maxAlternatives = 1;
   return r;
+}
+
+/** Maps the browser's recognition error codes to what we tell the worker. */
+export function recognitionError(code: string | undefined): RecognitionError {
+  if (code === "not-allowed" || code === "service-not-allowed" || code === "audio-capture") return "denied";
+  if (code === "no-speech" || code === "aborted") return "no-speech";
+  if (code === "network") return "network";
+  return "other";
 }
 
 /** What a worker might say, used when no microphone is available. */

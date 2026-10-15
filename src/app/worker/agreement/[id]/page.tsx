@@ -118,7 +118,7 @@ export default function AgreementPage() {
             <Scale className="size-5 text-marigold" aria-hidden="true" />
             <span className="font-display text-lg font-extrabold">{t("pakkaTitle")}</span>
           </div>
-          <SpeakButton text={agreementSpeech(job, lang)} compact />
+          <SpeakButton say={(l) => agreementSpeech(job, l)} compact />
         </div>
         <div className="relative px-4 pt-1 pb-2">
           <AgreementTerms job={job} lang={lang} />

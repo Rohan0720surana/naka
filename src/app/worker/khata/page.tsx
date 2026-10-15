@@ -11,6 +11,8 @@ import { Button, Card, Chip, SectionTitle, Tag } from "@/components/ui/primitive
 import { TRADES } from "@/lib/data/trades";
 import { dayLabel, isoDaysAgo, money, monthLabel } from "@/lib/format";
 import { useT } from "@/lib/hooks";
+import { translate } from "@/lib/i18n";
+import type { Lang } from "@/lib/types";
 import { khataDays, useDemo } from "@/lib/store";
 import { cn } from "@/lib/utils";
 
@@ -51,11 +53,13 @@ export default function KhataPage() {
 
   const toGo = Math.max(0, 90 - logged);
   const pct = Math.min(1, logged / 90);
-  const spoken = [
-    `${t("earnedMonth")}: ${money(earned)}`,
-    `${t("pendingDues")}: ${money(pendingTotal)}`,
-    t("bocwProgress", { n: logged }),
-  ].join(". ");
+  const spoken = (l: Lang) =>
+    [
+      `${translate(l, "earnedMonth")}: ${money(earned)}`,
+      `${translate(l, "pendingDues")}: ${money(pendingTotal)}`,
+      translate(l, "bocwProgress", { n: logged }),
+      toGo > 0 ? translate(l, "bocwHint", { n: toGo }) : translate(l, "bocwReady"),
+    ].join(". ");
 
   return (
     <div className="space-y-6 pt-4">
@@ -64,7 +68,7 @@ export default function KhataPage() {
           <h1 className="font-display text-[1.75rem] leading-tight font-extrabold">{t("khataTitle")}</h1>
           <p className="text-muted">{t("khataSub")}</p>
         </div>
-        <SpeakButton text={spoken} compact />
+        <SpeakButton say={spoken} compact />
       </header>
 
       <section className="relative overflow-hidden rounded-[1.6rem] border-2 border-ink bg-ink p-5 text-paper on-dark">

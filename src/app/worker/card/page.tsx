@@ -10,6 +10,8 @@ import { Button, Card, SectionTitle } from "@/components/ui/primitives";
 import { NAKAS } from "@/lib/data/places";
 import { TRADES } from "@/lib/data/trades";
 import { useT } from "@/lib/hooks";
+import { pick, translate } from "@/lib/i18n";
+import type { Lang } from "@/lib/types";
 import { khataDays, useDemo } from "@/lib/store";
 
 export default function CardPage() {
@@ -24,13 +26,14 @@ export default function CardPage() {
   };
 
   const naka = NAKAS[me.naka] ?? NAKAS["ghatkopar-naka"]!;
-  const spoken = [
-    me.name,
-    p(TRADES[me.trade].label),
-    t("yearsExp", { n: me.years }),
-    t("standsAt", { naka: p(naka.name) }),
-    t("jobsDone", { n: me.jobsDone }),
-  ].join(". ");
+  const spoken = (l: Lang) =>
+    [
+      l !== "en" && me.nameDeva ? me.nameDeva : me.name,
+      pick(TRADES[me.trade].label, l),
+      translate(l, "yearsExp", { n: me.years }),
+      translate(l, "standsAt", { naka: pick(naka.name, l) }),
+      translate(l, "jobsDone", { n: me.jobsDone }),
+    ].join(". ");
 
   const shareUrl = () => `${window.location.origin}/employer/workers/${me.id}`;
 
@@ -41,7 +44,7 @@ export default function CardPage() {
           <h1 className="font-display text-[1.75rem] leading-tight font-extrabold">{t("cardTitle")}</h1>
           <p className="text-muted">{t("cardSub")}</p>
         </div>
-        <SpeakButton text={spoken} compact />
+        <SpeakButton say={spoken} compact />
       </header>
 
       <motion.div initial={{ rotate: -2, y: 20, opacity: 0 }} animate={{ rotate: 0, y: 0, opacity: 1 }} transition={{ type: "spring", damping: 16 }}>

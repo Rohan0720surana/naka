@@ -14,8 +14,8 @@ import { Button, Chip } from "@/components/ui/primitives";
 import { NAKAS } from "@/lib/data/places";
 import { TRADES } from "@/lib/data/trades";
 import { useInFrame, useT } from "@/lib/hooks";
-import { LANGS, translate } from "@/lib/i18n";
-import { EXAMPLE_SAYING, getRecognition, parseSaying, speak, stopSpeaking } from "@/lib/speech";
+import { LANGS, translate, type TKey } from "@/lib/i18n";
+import { EXAMPLE_SAYING, getRecognition, parseSaying, recognitionError, speak, stopSpeaking, type RecognitionError } from "@/lib/speech";
 import { khataDays, useDemo } from "@/lib/store";
 import type { Lang, PhoneKind, TradeId } from "@/lib/types";
 import { cn } from "@/lib/utils";
@@ -119,7 +119,7 @@ export function Onboarding({ assisted }: { assisted: boolean }) {
             <LanguageStep
               onPick={(l) => {
                 setLang(l);
-                speak(translate(l, "obWelcome"), l);
+                speak((x) => translate(x, "obWelcome"), l);
                 go("welcome");
               }}
             />
@@ -130,7 +130,7 @@ export function Onboarding({ assisted }: { assisted: boolean }) {
               <NakaScene />
               <h1 className="mt-6 font-display text-[2rem] leading-tight font-extrabold">{t("obWelcome")}</h1>
               <p className="mt-2 text-[1.1rem] leading-snug text-muted">{t("obWelcomeSub")}</p>
-              <SpeakButton text={`${t("obWelcome")}. ${t("obWelcomeSub")}. ${t("obHow")}`} className="mt-4 self-start" />
+              <SpeakButton say={(x) => `${translate(x, "obWelcome")}. ${translate(x, "obWelcomeSub")}. ${translate(x, "obHow")}`} className="mt-4 self-start" />
               <h2 className="mt-7 font-display text-xl font-extrabold">{t("obHow")}</h2>
               <div className="mt-3 grid grid-cols-2 gap-3">
                 <BigChoice icon={<Mic className="size-9" aria-hidden="true" />} title={t("obSpeak")} sub={t("obSpeakSub")} onClick={() => go("voice")} primary />
@@ -151,13 +151,13 @@ export function Onboarding({ assisted }: { assisted: boolean }) {
           ) : null}
 
           {step === "trade" ? (
-            <StepBody title={t("obTradeQ")}>
+            <StepBody titleKey="obTradeQ">
               <TradeGrid
                 value={trade}
                 lang={lang}
                 onChange={(tr) => {
                   setTrade(tr);
-                  speak(TRADES[tr].label[lang], lang);
+                  speak((x) => TRADES[tr].label[x], lang);
                   setTimeout(() => go("years"), 260);
                 }}
               />
@@ -165,7 +165,7 @@ export function Onboarding({ assisted }: { assisted: boolean }) {
           ) : null}
 
           {step === "years" ? (
-            <StepBody title={t("obYearsQ")} footer={<Button size="xl" className="w-full" onClick={() => go("naka")}>{t("next")}</Button>}>
+            <StepBody titleKey="obYearsQ" footer={<Button size="xl" className="w-full" onClick={() => go("naka")}>{t("next")}</Button>}>
               <div className="flex items-center justify-center gap-5 py-4">
                 <Button variant="outline" size="xl" className="size-16 px-0" onClick={() => setYears((y) => Math.max(0, y - 1))} aria-label="−1">
                   <Minus className="size-7" aria-hidden="true" />
@@ -191,7 +191,7 @@ export function Onboarding({ assisted }: { assisted: boolean }) {
           ) : null}
 
           {step === "naka" ? (
-            <StepBody title={t("obNakaQ")}>
+            <StepBody titleKey="obNakaQ">
               <div className="grid gap-2.5">
                 {Object.values(NAKAS).map((n) => (
                   <button
@@ -227,7 +227,7 @@ export function Onboarding({ assisted }: { assisted: boolean }) {
 
           {step === "name" ? (
             <StepBody
-              title={t("obNameQ")}
+              titleKey="obNameQ"
               footer={
                 <Button
                   size="xl"
@@ -344,12 +344,14 @@ export function Onboarding({ assisted }: { assisted: boolean }) {
   );
 }
 
-function StepBody({ title, children, footer }: { title: string; children: React.ReactNode; footer?: React.ReactNode }) {
+function StepBody({ titleKey, children, footer }: { titleKey: TKey; children: React.ReactNode; footer?: React.ReactNode }) {
+  const { t } = useT();
+  const title = t(titleKey);
   return (
     <div className="flex flex-1 flex-col pt-5">
       <div className="flex items-start justify-between gap-3">
         <h1 className="font-display text-[1.7rem] leading-tight font-extrabold">{title}</h1>
-        <SpeakButton text={title} compact />
+        <SpeakButton say={(x) => translate(x, titleKey)} compact />
       </div>
       <div className="mt-5 flex-1">{children}</div>
       {footer ? <div className="sticky bottom-0 mt-6 bg-paper pt-2 pb-4">{footer}</div> : null}
@@ -418,13 +420,14 @@ function LanguageStep({ onPick }: { onPick: (l: Lang) => void }) {
 function VoiceStep({ onDone }: { onDone: (r: ReturnType<typeof parseSaying>) => void }) {
   const { t, p, lang } = useT();
   const [state, setState] = useState<"idle" | "listening" | "typing" | "heard" | "nomic">("idle");
+  const [err, setErr] = useState<RecognitionError | null>(null);
   const [text, setText] = useState("");
   const recRef = useRef<ReturnType<typeof getRecognition>>(null);
   const timers = useRef<ReturnType<typeof setTimeout>[]>([]);
 
   useEffect(
     () => () => {
-      recRef.current?.stop();
+      recRef.current?.abort?.();
       timers.current.forEach(clearTimeout);
       stopSpeaking();
     },
@@ -435,9 +438,12 @@ function VoiceStep({ onDone }: { onDone: (r: ReturnType<typeof parseSaying>) => 
 
   const playExample = () => {
     const words = EXAMPLE_SAYING[lang].split(" ");
+    timers.current.forEach(clearTimeout);
+    timers.current = [];
+    setErr(null);
     setText("");
     setState("typing");
-    speak(EXAMPLE_SAYING[lang], lang);
+    speak((x) => EXAMPLE_SAYING[x], lang);
     words.forEach((_, i) => {
       timers.current.push(
         setTimeout(() => {
@@ -449,8 +455,14 @@ function VoiceStep({ onDone }: { onDone: (r: ReturnType<typeof parseSaying>) => 
   };
 
   const listen = () => {
+    // Don't let the phone's own voice (the example) be picked up by the mic.
+    stopSpeaking();
+    timers.current.forEach(clearTimeout);
+    timers.current = [];
+    setErr(null);
     const rec = getRecognition(lang);
     if (!rec) {
+      setErr("unsupported");
       setState("nomic");
       return;
     }
@@ -458,20 +470,42 @@ function VoiceStep({ onDone }: { onDone: (r: ReturnType<typeof parseSaying>) => 
     setText("");
     setState("listening");
     let finalText = "";
+    let failed: RecognitionError | null = null;
     rec.onresult = (e) => {
       let s = "";
       for (let i = 0; i < e.results.length; i++) s += e.results[i]![0]!.transcript;
-      finalText = s;
-      setText(s);
+      finalText = s.trim();
+      setText(finalText);
     };
-    rec.onerror = () => setState("nomic");
-    rec.onend = () => setState(finalText ? "heard" : "nomic");
+    rec.onerror = (e) => {
+      failed = recognitionError(e.error);
+    };
+    rec.onend = () => {
+      recRef.current = null;
+      if (finalText) setState("heard");
+      else {
+        setErr(failed ?? "no-speech");
+        setState("nomic");
+      }
+    };
     try {
       rec.start();
     } catch {
+      setErr("other");
       setState("nomic");
     }
   };
+
+  const errorText =
+    err === "unsupported"
+      ? t("obNoMic")
+      : err === "denied"
+        ? t("micDenied")
+        : err === "network"
+          ? t("micNetwork")
+          : err === "no-speech"
+            ? t("micNoSpeech")
+            : t("micOther");
 
   return (
     <div className="flex flex-1 flex-col pt-5">
@@ -502,7 +536,11 @@ function VoiceStep({ onDone }: { onDone: (r: ReturnType<typeof parseSaying>) => 
         <p className="mt-5 font-display text-lg font-extrabold" aria-live="polite">
           {state === "listening" ? t("obListening") : t("obTapToSpeak")}
         </p>
-        {state === "nomic" ? <p className="mt-2 max-w-xs text-center text-[0.95rem] text-alert">{t("obNoMic")}</p> : null}
+        {state === "nomic" ? (
+          <p role="alert" className="mt-2 max-w-xs text-center text-[0.95rem] font-bold text-alert">
+            {errorText}
+          </p>
+        ) : null}
         <Button variant="outline" size="md" className="mt-4" onClick={playExample} disabled={state === "typing" || state === "listening"}>
           {t("obPlayExample")}
         </Button>

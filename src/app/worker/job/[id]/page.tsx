@@ -72,7 +72,7 @@ export default function JobDetail() {
           <ArrowLeft className="size-5" aria-hidden="true" />
           {t("back")}
         </Link>
-        <SpeakButton text={jobSpeech(job, lang)} />
+        <SpeakButton say={(l) => jobSpeech(job, l)} />
       </div>
 
       {danger ? (
@@ -272,7 +272,7 @@ export default function JobDetail() {
         <div className="rounded-[1.2rem] border-2 border-ink bg-white p-4">
           <div className="mb-1 flex items-center justify-between">
             <span className="font-display text-lg font-extrabold">{t("pakkaTitle")}</span>
-            <SpeakButton text={agreementSpeech(job, lang)} compact />
+            <SpeakButton say={(l) => agreementSpeech(job, l)} compact />
           </div>
           <AgreementTerms job={job} lang={lang} />
         </div>

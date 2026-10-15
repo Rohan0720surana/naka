@@ -157,7 +157,7 @@ function JobsFor({ w }: { w: Worker }) {
                     {done ? t("smsSent") : t("sendSms")}
                   </button>
                 ) : (
-                  <SpeakButton text={jobSpeech(j, lang)} compact />
+                  <SpeakButton say={(l) => jobSpeech(j, l)} compact />
                 )}
               </li>
             );

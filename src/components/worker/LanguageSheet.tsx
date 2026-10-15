@@ -28,7 +28,7 @@ export function LanguageSheet({ open, onClose }: { open: boolean; onClose: () =>
                 lang={l.id}
                 onClick={() => {
                   setLang(l.id);
-                  speak(SAY[l.id]!, l.id);
+                  speak((x) => (x === l.id ? SAY[l.id]! : `${l.english} selected`), l.id);
                   onClose();
                 }}
                 aria-pressed={on}
