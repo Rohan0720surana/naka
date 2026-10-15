@@ -111,14 +111,14 @@ export default function EmployerDashboard() {
           <Card className="bg-ink p-5 text-paper on-dark">
             <h2 className="flex items-center gap-2 font-display text-xl font-extrabold">
               <ShieldCheck className="size-6 text-marigold" aria-hidden="true" />
-              Why listings on Naka are clear
+              Why listings on RozGhar are clear
             </h2>
             <ul className="mt-3 space-y-2.5 text-[0.95rem] text-paper/85">
               {[
                 "Pay, hours and pay day are required — no “we'll discuss”.",
                 "Workers see your listing in their language, and can hear it read aloud.",
                 "Every hire becomes a pakka agreement both sides keep.",
-                "Your number stays private: calls are connected through Naka.",
+                "Your number stays private: calls are connected through RozGhar.",
               ].map((x) => (
                 <li key={x} className="flex gap-2">
                   <BadgeCheck className="mt-0.5 size-5 shrink-0 text-marigold" aria-hidden="true" />

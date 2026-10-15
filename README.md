@@ -1,8 +1,8 @@
-# Naka — the labour naka, in your pocket
+# RozGhar — the labour naka, in your pocket
 
 Frontend prototype for **Artemis 2026 (ACM KJSSE · Abhiyantriki), Problem Statement 2 — "Beyond the Waiting Line"**.
 
-Naka helps daily-wage workers and hawkers find nearby work with clear pay, show their skills without a résumé,
+RozGhar helps daily-wage workers and hawkers find nearby work with clear pay, show their skills without a résumé,
 trust every deal before they commit, and reach welfare schemes — by voice, in Hindi, Marathi and English, and even
 on a button phone. It keeps the roadside naka at the centre instead of replacing it.
 
@@ -13,7 +13,7 @@ details are simplified.
 
 ```bash
 npm install
-npm run dev
+npm run dev          # on Windows PowerShell use: npm.cmd run dev
 ```
 
 Open http://localhost:3000 (or the port shown). For the hackathon demo, open **/demo**.
@@ -24,7 +24,7 @@ Production build: `npm run build` then `npm start`.
 
 | Route | What it is |
 | --- | --- |
-| `/` | Story / landing page |
+| `/` | Landing page: product reel, scroll story of a morning at the naka, personas, features |
 | `/demo` | **Live demo**: worker phone, button phone (SMS), Naka Saathi and employer site side by side, all in sync |
 | `/worker/welcome` | Onboarding: choose language, then speak or tap pictures to make a Kaam Card |
 | `/worker` | Worker home: "free today" switch, offers, work feed (list or map) |
@@ -53,11 +53,12 @@ and the 4-tap rights check. Use **Reset demo** before presenting.
 
 - Next.js 16 (App Router) · React 19 · TypeScript · Tailwind CSS 4
 - Framer Motion for motion (respects reduced-motion)
-- Magic UI components (Marquee, Number Ticker, Animated Beam) — the same components 21st.dev lists, installed from
+- Framer Motion signature moments: rubber PAKKA stamp, scam hazard tape, naka scene that fills up, coins into the Khata, BEST bus on the skyline
+- Magic UI components (Marquee, Number Ticker) — the same components 21st.dev lists, installed from
   Magic UI's public registry because 21st.dev now requires sign-in to install
 - Zustand store persisted to localStorage and synced across tabs/frames
 - Web Speech API for read-aloud and voice onboarding (example playback when no mic is available)
-- Lucide icons + hand-drawn trade pictograms · Atkinson Hyperlegible, Baloo 2 and Mukta fonts
+- Lucide icons + hand-drawn trade pictograms · Khand (signboard headings), Atkinson Hyperlegible + Hind (body), Yatra One, Kalam and Courier Prime
 
 ## Project layout
 

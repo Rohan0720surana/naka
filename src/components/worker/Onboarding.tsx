@@ -1,8 +1,9 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { ArrowLeft, BadgeCheck, Hand, LoaderCircle, MapPin, Mic, Minus, Plus, Smartphone, Sparkles, Users } from "lucide-react";
+import { ArrowLeft, BadgeCheck, Hand, House, LoaderCircle, MapPin, Mic, Minus, Plus, Smartphone, Sparkles, Users } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { LogoMark } from "@/components/brand/Logo";
 import { TradeIcon } from "@/components/icons/TradeIcon";
@@ -12,7 +13,7 @@ import { KaamCard } from "@/components/worker/KaamCard";
 import { Button, Chip } from "@/components/ui/primitives";
 import { NAKAS } from "@/lib/data/places";
 import { TRADES } from "@/lib/data/trades";
-import { useT } from "@/lib/hooks";
+import { useInFrame, useT } from "@/lib/hooks";
 import { LANGS, translate } from "@/lib/i18n";
 import { EXAMPLE_SAYING, getRecognition, parseSaying, speak, stopSpeaking } from "@/lib/speech";
 import { khataDays, useDemo } from "@/lib/store";
@@ -53,6 +54,7 @@ export function Onboarding({ assisted }: { assisted: boolean }) {
   };
 
   const progressIndex = PROGRESS.indexOf(step);
+  const inFrame = useInFrame();
 
   const finish = () => {
     if (!trade) return;
@@ -65,7 +67,13 @@ export function Onboarding({ assisted }: { assisted: boolean }) {
   };
 
   return (
-    <div className="flex min-h-dvh flex-col pt-3">
+    <div className="relative flex min-h-dvh flex-col pt-3">
+      {inFrame || step !== "lang" ? null : (
+        <Link href="/" className="absolute top-3 right-0 inline-flex h-10 items-center gap-1.5 rounded-full border-2 border-line bg-white px-3 text-sm font-bold hover:border-ink">
+          <House className="size-4" aria-hidden="true" />
+          Main site
+        </Link>
+      )}
       {step !== "lang" && step !== "done" ? (
         <div className="flex items-center gap-3">
           <button

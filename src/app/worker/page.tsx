@@ -5,6 +5,7 @@ import Link from "next/link";
 import { ChevronRight, List, Map as MapIcon, MapPin } from "lucide-react";
 import { useMemo, useState } from "react";
 import { AreaMap } from "@/components/AreaMap";
+import { EmptyNaka, NakaStrip } from "@/components/art/Scenes";
 import { Avatar } from "@/components/Avatar";
 import { TradeIcon } from "@/components/icons/TradeIcon";
 import { JobCard } from "@/components/worker/JobCard";
@@ -164,6 +165,7 @@ export default function WorkerHome() {
 
         {jobs.length === 0 ? (
           <div className="rounded-[1.4rem] border-2 border-dashed border-line bg-white p-6 text-center">
+            <EmptyNaka className="mx-auto mb-3 max-w-[14rem]" />
             <p className="font-display text-lg font-extrabold">{t("noJobs")}</p>
             <p className="mt-1 text-muted">{t("noJobsHint")}</p>
           </div>
@@ -240,7 +242,8 @@ function Availability({ hiringCount }: { hiringCount: number }) {
           </motion.span>
         </button>
       </div>
-      <p className={cn("relative mt-3 text-[0.9rem]", available ? "text-paper/75" : "text-muted")}>
+      <NakaStrip on={available} className={cn("relative mt-2 transition-opacity", available ? "opacity-100" : "opacity-70")} />
+      <p className={cn("relative mt-1 text-[0.9rem]", available ? "text-paper/75" : "text-muted")}>
         {t("availHint", { count: hiringCount })}
       </p>
     </section>

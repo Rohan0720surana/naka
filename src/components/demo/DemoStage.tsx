@@ -53,12 +53,15 @@ export function DemoStage() {
     <div className="min-h-dvh bg-[#efe4cc] paper-grain">
       <header className="sticky top-0 z-30 border-b-2 border-ink/10 bg-paper/95 backdrop-blur">
         <div className="mx-auto flex h-16 max-w-[1500px] items-center gap-4 px-4 sm:px-6">
-          <Link href="/" className="flex items-center gap-2 rounded-xl">
-            <ArrowLeft className="size-4" aria-hidden="true" />
+          <Link href="/" className="flex items-center gap-2 rounded-xl" aria-label="Back to the main site">
             <Logo />
           </Link>
+          <Link href="/" className="hidden h-9 items-center gap-1.5 rounded-full border-2 border-line bg-white px-3 text-sm font-bold hover:border-ink sm:inline-flex">
+            <ArrowLeft className="size-4" aria-hidden="true" />
+            Main site
+          </Link>
           <div className="hidden min-w-0 md:block">
-            <h1 className="font-display text-lg leading-tight font-extrabold">Live demo — both sides of Naka, at once</h1>
+            <h1 className="font-display text-lg leading-tight font-extrabold">Live demo: both sides of RozGhar, at once</h1>
             <p className="text-sm text-muted">Everything you do in one window updates the others instantly.</p>
           </div>
           <div className="ml-auto flex items-center gap-2">
@@ -142,7 +145,7 @@ export function DemoStage() {
               ]}
             />
             <div className={device === "smart" ? "block" : "hidden"}>
-              <PhoneFrame src="/worker" title="Ramesh's phone — Naka worker app" frameKey={frameKey} />
+              <PhoneFrame src="/worker" title="Ramesh's phone: RozGhar worker app" frameKey={frameKey} />
               <p className="mt-3 text-center text-sm text-muted">Ramesh Yadav · painter · Ghatkopar Naka</p>
             </div>
             <div className={device === "saathi" ? "block" : "hidden"}>
@@ -154,7 +157,7 @@ export function DemoStage() {
 
           <div>
             <p className="mb-2 flex h-10 items-center justify-center text-sm font-bold text-muted xl:justify-start">Priya Nair · home owner in Powai · hiring</p>
-            <BrowserFrame src="/employer" title="Employer website" url="naka.app/employer" frameKey={empKey} onReload={() => setEmpKey((k) => k + 1)} />
+            <BrowserFrame src="/employer" title="Employer website" url="rozghar.app/employer" frameKey={empKey} onReload={() => setEmpKey((k) => k + 1)} />
           </div>
         </div>
 
