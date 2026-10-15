@@ -64,3 +64,16 @@ const noSubscribe = () => () => {};
 export function useOrigin() {
   return useSyncExternalStore(noSubscribe, () => window.location.origin, () => "");
 }
+
+function readInFrame() {
+  try {
+    return window.self !== window.top;
+  } catch {
+    return true;
+  }
+}
+
+/** True inside the /demo page's device frames, where "go to the main site" links are hidden. */
+export function useInFrame() {
+  return useSyncExternalStore(noSubscribe, readInFrame, () => false);
+}

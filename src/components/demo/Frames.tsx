@@ -19,16 +19,17 @@ export function PhoneFrame({
   return (
     <div
       className={cn(
-        "relative mx-auto w-[380px] max-w-full rounded-[3rem] border-[3px] border-ink bg-ink p-3 shadow-[0_40px_80px_-30px_rgba(22,26,61,0.6)]",
+        "relative mx-auto w-[380px] max-w-full rounded-[2.8rem] bg-[#0f1230] p-[10px] shadow-[0_40px_80px_-30px_rgba(22,26,61,0.6),inset_0_0_0_2px_#2b3166]",
         className,
       )}
     >
-      <div className="absolute top-24 -left-[7px] h-14 w-1.5 rounded-l bg-ink" aria-hidden="true" />
-      <div className="absolute top-44 -left-[7px] h-10 w-1.5 rounded-l bg-ink" aria-hidden="true" />
-      <div className="absolute top-32 -right-[7px] h-16 w-1.5 rounded-r bg-ink" aria-hidden="true" />
-      <div className="relative h-[min(780px,calc(100dvh-290px))] min-h-[520px] overflow-hidden rounded-[2.35rem] bg-paper">
-        <div className="pointer-events-none absolute top-2 left-1/2 z-10 h-6 w-28 -translate-x-1/2 rounded-full bg-ink" aria-hidden="true" />
-        <iframe key={frameKey} src={src} title={title} className="size-full border-0 pt-8" />
+      <div className="absolute top-32 -right-[4px] h-16 w-[5px] rounded-r bg-[#0f1230]" aria-hidden="true" />
+      <div className="absolute top-52 -right-[4px] h-10 w-[5px] rounded-r bg-[#0f1230]" aria-hidden="true" />
+      <div className="relative h-[min(780px,calc(100dvh-290px))] min-h-[520px] overflow-hidden rounded-[2.2rem] bg-paper">
+        <div className="pointer-events-none absolute top-0 inset-x-0 z-10 flex h-7 items-center justify-center bg-paper" aria-hidden="true">
+          <span className="size-3.5 rounded-full bg-[#0f1230]" />
+        </div>
+        <iframe key={frameKey} src={src} title={title} className="size-full border-0 pt-7" />
       </div>
     </div>
   );

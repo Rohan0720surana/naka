@@ -2,10 +2,17 @@
 
 import { AnimatePresence, motion } from "framer-motion";
 import { X } from "lucide-react";
-import { useEffect, useId, useRef, type ReactNode } from "react";
+import { useEffect, useId, useRef, useSyncExternalStore, type ReactNode } from "react";
+import { createPortal } from "react-dom";
 import { cn } from "@/lib/utils";
 
-/** Bottom sheet dialog: slides up from the thumb zone, Escape or backdrop closes it. */
+const noSubscribe = () => () => {};
+
+/**
+ * Bottom sheet dialog: slides up from the thumb zone, Escape or backdrop closes it.
+ * Rendered into <body> so a blurred or transformed parent (like a sticky
+ * header) can never clip it.
+ */
 export function Sheet({
   open,
   onClose,
@@ -60,10 +67,13 @@ export function Sheet({
     };
   }, [open, onClose]);
 
-  return (
+  const mounted = useSyncExternalStore(noSubscribe, () => true, () => false);
+  if (!mounted) return null;
+
+  return createPortal(
     <AnimatePresence>
       {open ? (
-        <div className="fixed inset-0 z-50 flex items-end justify-center sm:items-center">
+        <div className={cn("fixed inset-0 z-[60] flex items-end justify-center", wide && "sm:items-center sm:p-6")}>
           <motion.div
             className="absolute inset-0 bg-ink/55"
             initial={{ opacity: 0 }}
@@ -79,7 +89,8 @@ export function Sheet({
             aria-modal="true"
             aria-labelledby={titleId}
             className={cn(
-              "relative z-10 flex max-h-[92dvh] w-full flex-col overflow-hidden rounded-t-[1.75rem] border-2 border-ink bg-paper shadow-pop sm:rounded-[1.75rem]",
+              "relative z-10 flex max-h-[88dvh] w-full flex-col overflow-hidden rounded-t-[1.75rem] border-2 border-b-0 border-ink bg-paper shadow-pop",
+              wide && "sm:rounded-[1.75rem] sm:border-b-2",
               wide ? "max-w-2xl" : "max-w-[480px]",
               className,
             )}
@@ -88,8 +99,8 @@ export function Sheet({
             exit={{ y: "100%", transition: { duration: 0.18, ease: "easeIn" } }}
             transition={{ type: "spring", damping: 30, stiffness: 320 }}
           >
-            <div className="mx-auto mt-2.5 h-1.5 w-12 rounded-full bg-ink/20 sm:hidden" aria-hidden="true" />
-            <div className="flex items-start justify-between gap-3 px-5 pt-3 pb-2">
+            <div className="mx-auto mt-2.5 h-1.5 w-12 shrink-0 rounded-full bg-ink/20" aria-hidden="true" />
+            <div className="flex shrink-0 items-start justify-between gap-3 px-5 pt-3 pb-2">
               <h2 id={titleId} className="font-display text-xl leading-tight font-extrabold">
                 {title}
               </h2>
@@ -102,10 +113,11 @@ export function Sheet({
                 <X className="size-6" aria-hidden="true" />
               </button>
             </div>
-            <div className="overflow-y-auto px-5 pb-6">{children}</div>
+            <div className="overflow-y-auto overscroll-contain px-5 pb-[max(1.5rem,env(safe-area-inset-bottom))]">{children}</div>
           </motion.div>
         </div>
       ) : null}
-    </AnimatePresence>
+    </AnimatePresence>,
+    document.body,
   );
 }

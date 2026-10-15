@@ -78,7 +78,8 @@ export default function JobDetail() {
       {danger ? (
         <motion.div
           initial={{ scale: 0.96, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
+          animate={{ scale: 1, opacity: 1, x: [0, -8, 8, -6, 6, -3, 0] }}
+          transition={{ x: { delay: 0.35, duration: 0.5 } }}
           className="mt-3 overflow-hidden rounded-[1.4rem] border-2 border-ink bg-danger text-white"
           role="alert"
         >

@@ -2,44 +2,23 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
-import {
-  ArrowRight,
-  BadgeCheck,
-  Briefcase,
-  Building2,
-  Check,
-  Ear,
-  Hand,
-  HardHat,
-  Home,
-  Landmark,
-  Languages,
-  MessageSquareText,
-  Mic,
-  MousePointerClick,
-  Play,
-  Scale,
-  ShieldCheck,
-  Smartphone,
-  Users,
-  X,
-} from "lucide-react";
-import { useRef, type ReactNode } from "react";
-import { LogoMark, Logo } from "@/components/brand/Logo";
+import { ArrowRight, ArrowUpRight, Check, Play, X } from "lucide-react";
+import type { ReactNode } from "react";
+import { AndroidFrame, LaptopFrame } from "@/components/art/Devices";
+import { PakkaStamp, ScamTape } from "@/components/art/Moments";
+import { Portrait, type PersonaId } from "@/components/art/Portraits";
+import { TornEdge } from "@/components/art/Scenes";
+import { Logo, LogoMark } from "@/components/brand/Logo";
 import { TradeIcon } from "@/components/icons/TradeIcon";
-import { AnimatedBeam } from "@/components/ui/animated-beam";
 import { Marquee } from "@/components/ui/marquee";
 import { NumberTicker } from "@/components/ui/number-ticker";
-import { ButtonLink, Card } from "@/components/ui/primitives";
-import { FairMeter, HoursBar, SafetyChecks } from "@/components/worker/JobBits";
+import { ButtonLink } from "@/components/ui/primitives";
 import { JobCard } from "@/components/worker/JobCard";
 import { KaamCard } from "@/components/worker/KaamCard";
-import { EMPLOYERS, SEED_JOBS } from "@/lib/data/jobs";
-import { SCHEMES } from "@/lib/data/schemes";
+import { SEED_JOBS } from "@/lib/data/jobs";
 import { TRADES, TRADE_ORDER } from "@/lib/data/trades";
 import { SEED_WORKERS } from "@/lib/data/workers";
 import { LangContext } from "@/lib/hooks";
-import { assess } from "@/lib/risk";
 import { cn } from "@/lib/utils";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
@@ -47,10 +26,10 @@ const EASE = [0.22, 1, 0.36, 1] as const;
 function Reveal({ children, delay = 0, className }: { children: ReactNode; delay?: number; className?: string }) {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 28 }}
+      initial={{ opacity: 0, y: 24 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-80px" }}
-      transition={{ duration: 0.7, delay, ease: EASE }}
+      viewport={{ once: true, margin: "-60px" }}
+      transition={{ duration: 0.6, delay, ease: EASE }}
       className={className}
     >
       {children}
@@ -58,464 +37,379 @@ function Reveal({ children, delay = 0, className }: { children: ReactNode; delay
   );
 }
 
-function Eyebrow({ children, dark }: { children: ReactNode; dark?: boolean }) {
-  return (
-    <p className={cn("text-sm font-extrabold tracking-[0.18em] uppercase", dark ? "text-marigold" : "text-marigold-deep")}>{children}</p>
-  );
-}
+/* ------------------------------ painted band ------------------------------ */
 
-/* --------------------------------- marquee -------------------------------- */
-
-export function TradeMarquee() {
-  const phrases = [
-    "No résumé needed",
-    "पैसे का दिन तय",
-    "Your documents stay with you",
-    "ऐका तुमच्या भाषेत",
-    "Pay shown before you go",
-    "बोलकर बताइए",
-    "Pakka agreement, both sides",
-    "हक्क आणि मदत",
-  ];
+export function SignBand() {
   return (
-    <section aria-label="Trades and promises" className="border-y-2 border-ink bg-ink py-5 text-paper on-dark">
-      <Marquee pauseOnHover className="[--duration:46s] [--gap:1.25rem]">
+    <section aria-label="Trades on the naka" className="relative border-y-[3px] border-ink bg-bus py-4 text-white">
+      <div className="absolute inset-x-0 top-0 h-2 tape-hazard tape-moving opacity-90" aria-hidden="true" />
+      <Marquee pauseOnHover className="mt-1 [--duration:52s] [--gap:2.5rem]">
         {TRADE_ORDER.map((id) => (
-          <span key={id} className="flex items-center gap-3 rounded-full border-2 border-white/15 bg-white/5 py-1.5 pr-5 pl-1.5">
-            <span className="flex size-10 items-center justify-center rounded-full bg-paper">
+          <span key={id} className="flex items-center gap-3 whitespace-nowrap">
+            <span className="flex size-11 items-center justify-center rounded-full border-2 border-ink bg-paper">
               <TradeIcon trade={id} className="size-8" />
             </span>
-            <span className="font-display text-lg font-extrabold whitespace-nowrap">
-              {TRADES[id].label.en} <span className="text-marigold">·</span> <span lang="hi">{TRADES[id].label.hi}</span>{" "}
-              <span className="text-marigold">·</span> <span lang="mr">{TRADES[id].label.mr}</span>
+            <span className="font-display text-[1.6rem] font-bold tracking-wide">{TRADES[id].label.en}</span>
+            <span lang="hi" className="font-poster text-[1.3rem] text-marigold">
+              {TRADES[id].label.hi}
+            </span>
+            <span lang="mr" className="font-display text-[1.3rem] font-semibold text-white/70">
+              {TRADES[id].label.mr}
             </span>
           </span>
         ))}
       </Marquee>
-      <Marquee reverse pauseOnHover className="mt-2 [--duration:38s] [--gap:2rem]">
-        {phrases.map((p) => (
-          <span key={p} className="flex items-center gap-3 font-display text-xl font-extrabold whitespace-nowrap text-paper/70">
-            <span className="size-2 rounded-full bg-marigold" aria-hidden="true" />
-            {p}
-          </span>
-        ))}
-      </Marquee>
+      <div className="absolute inset-x-0 bottom-0 h-2 tape-hazard tape-moving opacity-90 [animation-direction:reverse]" aria-hidden="true" />
     </section>
   );
 }
 
-/* --------------------------------- problem -------------------------------- */
+/* --------------------------------- personas -------------------------------- */
 
-const PAINS = [
-  { n: "01", title: "Work depends on luck", body: "Whether a family eats tonight depends on whether the right person stops at the naka this morning." },
-  { n: "02", title: "Skill is invisible", body: "Twelve years of fine finishing work, and nothing to show for it — no résumé, no profile, no network." },
-  { n: "03", title: "Terms are vague, scams are real", body: "“We'll see about pay.” Advance fees for jobs abroad. Aadhaar cards kept “for safety”. Wages that never arrive." },
-  { n: "04", title: "Rights are out of reach", body: "Pensions, insurance and welfare boards exist — written in forms, English and offices few workers can reach." },
+const PERSONAS: {
+  id: PersonaId;
+  name: string;
+  role: string;
+  quote: string;
+  quoteLang: "hi" | "mr" | "en";
+  english?: string;
+  naka: string;
+  href: string;
+}[] = [
+  {
+    id: "ramesh",
+    name: "Ramesh Yadav",
+    role: "Painter · 12 years · Ghatkopar naka",
+    quote: "बारह साल का काम है, पर दिखाने को कुछ नहीं।",
+    quoteLang: "hi",
+    english: "Twelve years of work, and nothing to show for it.",
+    naka: "Gets a Kaam Card, work near him in Hindi, and a pakka deal before he travels.",
+    href: "/worker",
+  },
+  {
+    id: "arjun",
+    name: "Arjun Paswan",
+    role: "Helper · no smartphone",
+    quote: "मेरे पास बटन वाला फ़ोन है। काम उसी पर आना चाहिए।",
+    quoteLang: "hi",
+    english: "I have a button phone. Work should reach me on that.",
+    naka: "Gets work alerts by SMS in Hindi and answers with one key: 1 for yes.",
+    href: "/demo",
+  },
+  {
+    id: "priya",
+    name: "Priya Nair",
+    role: "Home owner · Powai",
+    quote: "I want someone I can trust, and to pay them fairly. I just don't know where to look.",
+    quoteLang: "en",
+    naka: "Posts work in three steps, sees vouched workers nearby, and keeps the same agreement.",
+    href: "/employer",
+  },
+  {
+    id: "sunil",
+    name: "Sunil Patil",
+    role: "Naka Saathi · Ghatkopar",
+    quote: "नाक्यावर एक फोन असला तरी सगळ्यांना काम मिळू शकतं.",
+    quoteLang: "mr",
+    english: "Even one phone at the naka can bring work to everyone.",
+    naka: "Registers workers who have no phone and marks who's at the naka each morning.",
+    href: "/saathi",
+  },
 ];
 
-export function Problem() {
+export function Personas() {
   return (
-    <section id="problem" aria-labelledby="problem-title" className="scroll-mt-20 bg-paper py-24">
+    <section id="how" aria-labelledby="personas-title" className="paper-texture scroll-mt-16 bg-paper py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
-        <div className="grid gap-12 lg:grid-cols-[1.1fr_1fr] lg:items-end">
-          <Reveal>
-            <Eyebrow>6:30 AM · Ghatkopar naka</Eyebrow>
-            <h2 id="problem-title" className="mt-3 font-display text-[2.4rem] leading-[1.05] font-extrabold sm:text-[3.2rem]">
-              Every morning, a city&apos;s builders wait by the road to be chosen.
-            </h2>
-            <p className="mt-5 max-w-xl text-lg leading-relaxed text-ink/75">
-              Plumbers, carpenters, painters, masons, sweepers and helpers stand with their tools at roadside hiring points. Years of
-              skill, and no way to show it. The work is real — the system around it isn&apos;t.
-            </p>
-          </Reveal>
-          <Reveal delay={0.1}>
-            <dl className="grid grid-cols-2 gap-3">
-              <Stat value={90} suffix="%" label="of India's workers are in informal work (approx.)" />
-              <Stat value={30} suffix=" crore+" label="unorganised workers registered on e-Shram" />
-              <Stat value={0} suffix="" label="résumés needed to get work on Naka" dark className="col-span-2" />
-            </dl>
-          </Reveal>
-        </div>
-
-        <ul className="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {PAINS.map((p, i) => (
-            <li key={p.n}>
-              <Reveal delay={i * 0.08} className="h-full">
-                <div className="h-full rounded-[1.6rem] border-2 border-ink bg-white p-6 shadow-[0_6px_0_0_var(--color-ink)]">
-                  <span className="font-display text-4xl font-extrabold text-marigold-deep">{p.n}</span>
-                  <h3 className="mt-3 font-display text-xl leading-tight font-extrabold">{p.title}</h3>
-                  <p className="mt-2 leading-relaxed text-ink/70">{p.body}</p>
-                </div>
-              </Reveal>
-            </li>
-          ))}
-        </ul>
-      </div>
-    </section>
-  );
-}
-
-function Stat({ value, suffix, label, dark, className }: { value: number; suffix: string; label: string; dark?: boolean; className?: string }) {
-  return (
-    <div className={cn("rounded-[1.4rem] border-2 border-ink p-5", dark ? "bg-ink text-paper" : "bg-marigold", className)}>
-      <dt className="sr-only">{label}</dt>
-      <dd>
-        <span className="font-display text-[2.6rem] leading-none font-extrabold">
-          <NumberTicker value={value} className={cn("tracking-tight", dark ? "text-marigold" : "text-ink")} />
-          {suffix}
-        </span>
-        <span className={cn("mt-2 block text-[0.95rem] leading-snug font-bold", dark ? "text-paper/75" : "text-ink/75")}>{label}</span>
-      </dd>
-    </div>
-  );
-}
-
-/* ------------------------------- how it works ------------------------------ */
-
-const BEAM_BASE = { pathColor: "#161a3d", pathOpacity: 0.15, pathWidth: 3, duration: 4 };
-const BEAM_IN = { ...BEAM_BASE, gradientStartColor: "#f5b014", gradientStopColor: "#c98200" };
-const BEAM_OUT = { ...BEAM_BASE, gradientStartColor: "#137a3a", gradientStopColor: "#2456c9" };
-
-export function HowItWorks() {
-  const container = useRef<HTMLDivElement>(null);
-  const hub = useRef<HTMLDivElement>(null);
-  const w1 = useRef<HTMLDivElement>(null);
-  const w2 = useRef<HTMLDivElement>(null);
-  const w3 = useRef<HTMLDivElement>(null);
-  const e1 = useRef<HTMLDivElement>(null);
-  const e2 = useRef<HTMLDivElement>(null);
-  const e3 = useRef<HTMLDivElement>(null);
-
-  const left = [
-    { ref: w1, Icon: Smartphone, title: "Worker with a smartphone", sub: "App · voice · 3 languages" },
-    { ref: w2, Icon: MessageSquareText, title: "Worker with a button phone", sub: "SMS in Hindi · reply 1 or 2" },
-    { ref: w3, Icon: Users, title: "Naka Saathi", sub: "Registers & helps those with no phone" },
-  ];
-  const right = [
-    { ref: e1, Icon: Home, title: "Households", sub: "Post work in 3 steps" },
-    { ref: e2, Icon: Building2, title: "Contractors & companies", sub: "Find verified, vouched workers" },
-    { ref: e3, Icon: Landmark, title: "Schemes & help centres", sub: "e-Shram, pension, welfare board" },
-  ];
-
-  return (
-    <section id="how" aria-labelledby="how-title" className="scroll-mt-20 border-y-2 border-ink bg-sand py-24">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6">
-        <Reveal className="max-w-3xl">
-          <Eyebrow>How it works</Eyebrow>
-          <h2 id="how-title" className="mt-3 font-display text-[2.4rem] leading-[1.05] font-extrabold sm:text-[3.2rem]">
-            The naka stays. Naka connects it to everyone else.
+        <Reveal className="grid gap-6 lg:grid-cols-[1fr_1fr] lg:items-end">
+          <h2 id="personas-title" className="signboard text-[2.8rem] sm:text-[3.8rem]">
+            Four people. One naka.
           </h2>
-          <p className="mt-4 text-lg leading-relaxed text-ink/75">
-            Workers keep standing where they always stand. Naka makes that spot visible — to households, contractors and the
-            government services meant for them.
+          <p className="max-w-lg text-lg leading-relaxed text-ink/75">
+            RozGhar is built around the people who already meet at the roadside every morning. Nobody is asked to change how they find
+            work. They just get better tools for it.
           </p>
         </Reveal>
 
-        <div ref={container} className="relative mt-14 grid grid-cols-[1fr_auto_1fr] items-center gap-4 sm:gap-10">
-          <div className="space-y-5">
-            {left.map((n) => (
-              <Node key={n.title} {...n} />
-            ))}
-          </div>
-          <div ref={hub} className="relative z-10 flex size-24 items-center justify-center rounded-[1.8rem] border-2 border-ink bg-ink shadow-[0_8px_0_0_var(--color-marigold-deep)] sm:size-32">
-            <LogoMark className="size-16 sm:size-20" />
-          </div>
-          <div className="space-y-5">
-            {right.map((n) => (
-              <Node key={n.title} {...n} alignRight />
-            ))}
-          </div>
-          <AnimatedBeam containerRef={container} fromRef={w1} toRef={hub} curvature={40} {...BEAM_IN} delay={0} />
-          <AnimatedBeam containerRef={container} fromRef={w2} toRef={hub} {...BEAM_IN} delay={0.5} />
-          <AnimatedBeam containerRef={container} fromRef={w3} toRef={hub} curvature={-40} {...BEAM_IN} delay={1} />
-          <AnimatedBeam containerRef={container} fromRef={hub} toRef={e1} curvature={40} {...BEAM_OUT} delay={1.5} />
-          <AnimatedBeam containerRef={container} fromRef={hub} toRef={e2} {...BEAM_OUT} delay={2} />
-          <AnimatedBeam containerRef={container} fromRef={hub} toRef={e3} curvature={-40} {...BEAM_OUT} delay={2.5} />
-        </div>
-
-        <ol className="mt-16 grid gap-4 md:grid-cols-3">
-          {[
-            { Icon: MousePointerClick, t: "Say “I'm free today”", b: "One big switch, or the Naka Saathi marks you present. Employers nearby can now see your Kaam Card." },
-            { Icon: Ear, t: "Get clear work — and hear it", b: "Pay, hours, place and pay day, in your language. A safety check flags anything that looks like a scam." },
-            { Icon: Scale, t: "Make it pakka, get paid, keep proof", b: "Both sides hold the same agreement. Payment is confirmed and every day lands in your Kamai Khata." },
-          ].map(({ Icon, t, b }, i) => (
-            <li key={t}>
-              <Reveal delay={i * 0.1} className="h-full">
-                <div className="flex h-full gap-4 rounded-[1.6rem] border-2 border-ink/15 bg-paper p-6">
-                  <span className="flex size-12 shrink-0 items-center justify-center rounded-2xl bg-marigold font-display text-xl font-extrabold">{i + 1}</span>
-                  <div>
-                    <h3 className="flex items-center gap-2 font-display text-xl font-extrabold">
-                      <Icon className="size-5" aria-hidden="true" />
-                      {t}
-                    </h3>
-                    <p className="mt-2 leading-relaxed text-ink/70">{b}</p>
-                  </div>
-                </div>
+        <ul className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          {PERSONAS.map((p, i) => (
+            <li key={p.id} className={cn("flex", i % 2 === 1 ? "lg:pt-10" : "lg:pb-10")}>
+              <Reveal delay={i * 0.07} className="flex w-full">
+                <article className="flex w-full flex-col rounded-[1.4rem] border-2 border-ink bg-white p-5 shadow-[5px_5px_0_0_var(--color-ink)] transition-transform duration-300 hover:-translate-y-1 hover:rotate-[-0.6deg]">
+                  <Portrait who={p.id} className="size-24" title={`Illustration of ${p.name}`} />
+                  <h3 className="mt-4 font-display text-[1.6rem] leading-none font-bold">{p.name}</h3>
+                  <p className="mt-1 text-sm font-bold text-ink/55">{p.role}</p>
+                  <blockquote className="mt-4 flex-1">
+                    <p lang={p.quoteLang} className="font-hand text-[1.25rem] leading-snug text-ink">
+                      “{p.quote}”
+                    </p>
+                    {p.english ? <p className="mt-1.5 text-sm text-ink/55 italic">{p.english}</p> : null}
+                  </blockquote>
+                  <p className="mt-5 border-t-2 border-dashed border-line pt-4 text-[0.95rem] leading-snug">{p.naka}</p>
+                  <Link href={p.href} className="mt-3 inline-flex items-center gap-1 text-sm font-bold underline decoration-marigold decoration-2 underline-offset-4">
+                    See their screen <ArrowUpRight className="size-4" aria-hidden="true" />
+                  </Link>
+                </article>
               </Reveal>
             </li>
           ))}
-        </ol>
+        </ul>
+        <p className="mt-10 text-sm text-ink/50">Illustrative people, based on how roadside hiring works in Mumbai.</p>
       </div>
     </section>
   );
 }
 
-function Node({
-  ref,
-  Icon,
-  title,
-  sub,
-  alignRight,
-}: {
-  ref: React.RefObject<HTMLDivElement | null>;
-  Icon: typeof Home;
-  title: string;
-  sub: string;
-  alignRight?: boolean;
-}) {
+/* --------------------------------- posters --------------------------------- */
+
+export function PosterWall() {
+  const posters = [
+    { value: 90, suffix: "%", label: "of India's workers earn their living in informal work (approx.)", tone: "bg-marigold", rot: "-rotate-2" },
+    { value: 30, suffix: " cr+", label: "unorganised workers have signed up on the e-Shram portal", tone: "bg-white", rot: "rotate-1" },
+    { value: 0, suffix: "", label: "résumés, forms in English or smartphones needed to get work on RozGhar", tone: "bg-ink text-paper", rot: "-rotate-1" },
+  ];
   return (
-    <div className={cn("flex", alignRight ? "justify-start" : "justify-end")}>
-      <div
-        ref={ref}
-        className={cn(
-          "relative z-10 flex max-w-[16rem] items-center gap-3 rounded-2xl border-2 border-ink bg-white p-3 shadow-[0_4px_0_0_var(--color-ink)]",
-          alignRight && "flex-row",
-        )}
-      >
-        <span className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-marigold-soft">
-          <Icon className="size-5" aria-hidden="true" />
-        </span>
-        <span className="hidden min-w-0 sm:block">
-          <span className="block font-bold leading-tight">{title}</span>
-          <span className="block text-sm leading-tight text-muted">{sub}</span>
-        </span>
-        <span className="sr-only sm:hidden">{title}</span>
+    <section aria-label="The scale of it" className="relative overflow-hidden border-y-[3px] border-ink bg-[#d9cdb4] py-20">
+      <div className="paper-texture absolute inset-0" aria-hidden="true" />
+      <div className="relative mx-auto grid max-w-6xl gap-8 px-4 sm:grid-cols-3 sm:px-6">
+        {posters.map((p, i) => (
+          <motion.div
+            key={p.label}
+            initial={{ opacity: 0, rotate: i % 2 ? 14 : -14, y: -30 }}
+            whileInView={{ opacity: 1, rotate: 0, y: 0 }}
+            viewport={{ once: true, margin: "-60px" }}
+            transition={{ type: "spring", stiffness: 120, damping: 11, delay: i * 0.12 }}
+            style={{ transformOrigin: "50% 0%" }}
+          >
+            <figure className={cn("relative transition-transform duration-300 hover:rotate-0", p.rot)}>
+              <span className="absolute -top-3 left-1/2 z-10 h-6 w-20 -translate-x-1/2 rotate-[-4deg] bg-[#f3ead2]/80 shadow-sm" aria-hidden="true" />
+              <div className={cn("border-2 border-ink p-6 pb-7 shadow-[6px_8px_0_0_rgba(22,26,61,0.35)]", p.tone)}>
+                <p className="font-display text-[4.2rem] leading-none font-bold">
+                  <NumberTicker value={p.value} className={cn("tracking-tight", p.tone.includes("ink") ? "text-marigold" : "text-ink")} />
+                  {p.suffix}
+                </p>
+                <figcaption className="mt-3 text-[1.02rem] leading-snug font-bold">{p.label}</figcaption>
+              </div>
+              <TornEdge className={p.tone.includes("ink") ? "text-ink" : p.tone.includes("marigold") ? "text-marigold" : "text-white"} />
+            </figure>
+          </motion.div>
+        ))}
       </div>
-    </div>
+    </section>
   );
 }
 
-/* --------------------------------- features -------------------------------- */
+/* ------------------------------- feature wall ------------------------------ */
 
-export function Features() {
+export function FeatureWall() {
   const safe = SEED_JOBS.find((j) => j.id === "j2")!;
   const scam = SEED_JOBS.find((j) => j.id === "j4")!;
   const ramesh = SEED_WORKERS[0]!;
-  const scamCheck = assess(scam, EMPLOYERS[scam.employerId]);
-  const fairJob = SEED_JOBS.find((j) => j.id === "j1")!;
-  const fairCheck = assess(fairJob, EMPLOYERS[fairJob.employerId]);
 
   return (
-    <section id="features" aria-labelledby="features-title" className="scroll-mt-20 bg-paper py-24">
+    <section id="features" aria-labelledby="features-title" className="scroll-mt-16 bg-paper py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
         <Reveal className="max-w-3xl">
-          <Eyebrow>What Naka does</Eyebrow>
-          <h2 id="features-title" className="mt-3 font-display text-[2.4rem] leading-[1.05] font-extrabold sm:text-[3.2rem]">
-            Four promises, built for irregular work and a five-inch screen.
+          <h2 id="features-title" className="signboard text-[2.8rem] sm:text-[3.8rem]">
+            What changes with RozGhar.
           </h2>
+          <p className="mt-5 text-lg leading-relaxed text-ink/75">
+            Every screen below is the real app, not a mock-up. Open the live demo to use them.
+          </p>
         </Reveal>
 
-        <div className="mt-16 space-y-24">
-          <Feature
-            n="01"
-            Icon={Briefcase}
-            title="Find work, reliably"
-            lead="Nearby daily-wage, short and monthly work — where the important things are the biggest things on the screen."
-            points={["Pay in big numbers, with the total for the job", "Hours drawn from sunrise to night", "Minutes on foot, by bus or by train", "Every job can be read aloud"]}
-            visual={
-              <div className="space-y-4">
+        <LangContext.Provider value="en">
+          <div className="mt-14 grid gap-5 lg:grid-cols-3">
+            <Tile
+              className="lg:col-span-2"
+              kicker="Find work"
+              title="The pay is the biggest thing on the card. Scams get taped off."
+              body="Hours as a sunrise-to-night bar, distance in minutes by bus or on foot, and every listing read aloud. Six plain checks catch advance fees, kept documents and too-good pay."
+            >
+              <div className="grid gap-4 sm:grid-cols-2">
                 <JobCard job={safe} preview />
-                <Card className="p-4">
-                  <p className="mb-3 text-sm font-bold text-muted">Hours, without reading numbers</p>
-                  <HoursBar start={8} end={17} />
-                </Card>
+                <div className="relative">
+                  <JobCard job={scam} preview />
+                  <ScamTape className="top-[44%]" />
+                </div>
               </div>
-            }
-          />
-          <Feature
-            n="02"
-            Icon={BadgeCheck}
-            title="Show skills, without credentials"
-            lead="The Kaam Card replaces the résumé: trade, years, work photos and the people who vouch — with a QR code for the toolbox."
-            points={["Made in 60 seconds by voice or pictures", "Vouches from the naka's Saathi and past employers", "Logged work days become proof of experience", "Print it, share it on WhatsApp, or let them scan"]}
-            visual={<KaamCard worker={ramesh} lang="en" daysLogged={74} className="mx-auto max-w-md rotate-[-1.5deg]" />}
-            flip
-          />
-          <Feature
-            n="03"
-            Icon={ShieldCheck}
-            title="Trust before anyone commits"
-            lead="Every listing must say the pay, hours and pay day. A safety check reads it like a careful friend would."
-            points={["Six plain checks on every job", "A fair-pay meter against usual local rates", "Scams named in words: fees, kept documents, too-good pay", "A Pakka agreement both sides keep — proof if pay doesn't come"]}
-            visual={
-              <div className="space-y-4">
-                <Card className="border-danger/40 p-5">
-                  <p className="mb-3 font-display text-lg font-extrabold">“Painters needed in Dubai — pay ₹15,000 for visa”</p>
-                  <SafetyChecks a={scamCheck} />
-                </Card>
-                <Card className="p-5">
-                  <FairMeter job={fairJob} fair={fairCheck.fair} />
-                </Card>
+            </Tile>
+            <Tile className="lg:row-span-2" kicker="Show skills" title="A visiting card for people who never had one.">
+              <div className="mx-auto w-full max-w-[19rem] rotate-[1.5deg] transition-transform duration-300 hover:rotate-0">
+                <KaamCard worker={ramesh} lang="en" daysLogged={74} />
               </div>
-            }
-          />
-          <Feature
-            n="04"
-            Icon={Landmark}
-            title="Rights and support, in plain words"
-            lead="Four taps find the schemes a worker may qualify for — then the papers needed, the nearest help centre and a number to call."
-            points={["e-Shram, pension, welfare board, health and insurance", "Paper checklist: what you have, what you need", "Unpaid wages? Steps, legal aid and the agreement as proof", "Work days count toward the welfare board's 90 days"]}
-            visual={
-              <div className="grid gap-3 sm:grid-cols-2">
-                {SCHEMES.filter((s) => ["eshram", "bocw", "pmsym", "pmjay"].includes(s.id)).map((s, i) => (
-                  <motion.div
-                    key={s.id}
-                    initial={{ opacity: 0, y: 16 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: i * 0.08 }}
-                    className="rounded-[1.3rem] border-2 border-ink/10 bg-white p-4 shadow-card"
-                  >
-                    <span className="flex size-10 items-center justify-center rounded-xl bg-sky-soft text-sky">
-                      {s.id === "bocw" ? <HardHat className="size-5" aria-hidden="true" /> : <Landmark className="size-5" aria-hidden="true" />}
-                    </span>
-                    <p className="mt-3 font-display text-lg leading-tight font-extrabold">{s.name.en}</p>
-                    <p lang="hi" className="text-sm font-bold text-muted">{s.name.hi}</p>
-                    <p className="mt-2 text-[0.95rem] leading-snug">{s.short.en}</p>
-                  </motion.div>
+              <ul className="mt-6 space-y-2 text-[0.95rem] font-bold">
+                {["Made by voice in a minute", "Vouched for by the Naka Saathi", "QR for the toolbox, share on WhatsApp"].map((x) => (
+                  <li key={x} className="flex gap-2">
+                    <Check className="mt-0.5 size-4 shrink-0 text-leaf" strokeWidth={3} aria-hidden="true" />
+                    {x}
+                  </li>
                 ))}
+              </ul>
+            </Tile>
+            <Tile kicker="Build trust" title="Both sides keep the same pakka agreement.">
+              <Chit />
+            </Tile>
+            <Tile kicker="Rights" title="Four taps to the schemes you may qualify for.">
+              <div className="space-y-2">
+                {["How old are you?", "What work do you mostly do?", "Monthly income under ₹15,000?", "Do you have a bank account?"].map((q, i) => (
+                  <div key={q} className="flex items-center gap-3 rounded-xl border-2 border-ink/10 bg-paper px-3 py-2.5 text-[0.95rem] font-bold">
+                    <span className="flex size-7 shrink-0 items-center justify-center rounded-full bg-ink text-sm text-paper">{i + 1}</span>
+                    {q}
+                  </div>
+                ))}
+                <p className="rounded-xl bg-leaf px-3 py-2.5 font-bold text-white">→ 5 schemes may be for you: e-Shram, pension, welfare board…</p>
               </div>
-            }
-            flip
-          />
-        </div>
+            </Tile>
+            <Tile className="lg:col-span-3" kicker="No smartphone" title="Work by SMS, answered with one key.">
+              <div className="grid items-center gap-6 md:grid-cols-[1.2fr_1fr]">
+                <div className="space-y-2 rounded-xl bg-[#c8d6b0] p-4 font-deva text-[0.95rem] text-[#1d2814]">
+                  <p className="rounded-md border border-[#22301a]/30 bg-[#d6e2c1] px-3 py-2">
+                    रोज़घर: हेल्पर का काम, घाटकोपर। ₹650 रोज़, सुबह 8 – शाम 5। उसी दिन पैसा। काम चाहिए तो 1 भेजें।
+                  </p>
+                  <p className="ml-auto w-fit rounded-md border border-[#22301a]/40 bg-[#e2ecd0] px-3 py-1.5 font-bold">1</p>
+                  <p className="rounded-md border border-[#22301a]/30 bg-[#d6e2c1] px-3 py-2">पक्का! श्री गणेश कॉन्ट्रैक्टर्स ने हाँ कहा। करार नं. NK-2401।</p>
+                </div>
+                <div className="space-y-3 text-[1.02rem] leading-relaxed text-ink/75">
+                  <p>
+                    Arjun has a ₹1,000 button phone. RozGhar sends work in Hindi; he replies <strong>1</strong> for yes, <strong>2</strong> for no,{" "}
+                    <strong>0</strong> for help.
+                  </p>
+                  <p>A Naka Saathi, one person at the naka with a smartphone, registers anyone with no phone at all and marks who is there each morning.</p>
+                </div>
+              </div>
+            </Tile>
+          </div>
+        </LangContext.Provider>
       </div>
     </section>
   );
 }
 
-function Feature({
-  n,
-  Icon,
+function Tile({
+  kicker,
   title,
-  lead,
-  points,
-  visual,
-  flip,
+  body,
+  children,
+  className,
 }: {
-  n: string;
-  Icon: typeof Briefcase;
+  kicker: string;
   title: string;
-  lead: string;
-  points: string[];
-  visual: ReactNode;
-  flip?: boolean;
+  body?: string;
+  children: ReactNode;
+  className?: string;
 }) {
   return (
-    <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
-      <Reveal className={cn(flip && "lg:order-2")}>
-        <div className="flex items-center gap-3">
-          <span className="font-display text-5xl font-extrabold text-marigold-deep">{n}</span>
-          <span className="flex size-12 items-center justify-center rounded-2xl border-2 border-ink bg-marigold">
-            <Icon className="size-6" aria-hidden="true" />
-          </span>
+    <Reveal className={cn("h-full", className)}>
+      <article className="flex h-full flex-col overflow-hidden rounded-[1.6rem] border-2 border-ink bg-sand transition-[transform,box-shadow] duration-300 hover:-translate-y-1 hover:shadow-[6px_6px_0_0_var(--color-ink)]">
+        <div className="p-6 pb-4">
+          <p className="font-mono text-sm font-bold tracking-wider text-bus uppercase">{kicker}</p>
+          <h3 className="mt-2 font-display text-[1.75rem] leading-[1.05] font-bold">{title}</h3>
+          {body ? <p className="mt-3 max-w-2xl leading-relaxed text-ink/70">{body}</p> : null}
         </div>
-        <h3 className="mt-4 font-display text-[2rem] leading-tight font-extrabold sm:text-[2.4rem]">{title}</h3>
-        <p className="mt-3 text-lg leading-relaxed text-ink/75">{lead}</p>
-        <ul className="mt-6 space-y-3">
-          {points.map((p) => (
-            <li key={p} className="flex gap-3 text-[1.05rem] font-bold">
-              <span className="mt-0.5 flex size-6 shrink-0 items-center justify-center rounded-full bg-leaf text-white">
-                <Check className="size-4" strokeWidth={3} aria-hidden="true" />
-              </span>
-              {p}
-            </li>
+        <div className="flex flex-1 flex-col justify-center px-6 pb-6">{children}</div>
+      </article>
+    </Reveal>
+  );
+}
+
+function Chit() {
+  const rows: [string, string][] = [
+    ["Work", "Painting, 2 days"],
+    ["Place", "Powai, Hiranandani"],
+    ["Hours", "9 AM – 6 PM"],
+    ["Pay", "₹900 a day"],
+    ["Paid", "Same day · UPI"],
+  ];
+  return (
+    <div className="relative mx-auto max-w-xs">
+      <div className="rotate-[-1deg] border-2 border-ink bg-white shadow-[4px_4px_0_0_var(--color-ink)]">
+        <div className="flex items-center justify-between bg-ink px-3 py-2 text-paper">
+          <span className="font-display text-lg font-bold">Pakka agreement</span>
+          <span className="font-mono text-xs">NK-2401</span>
+        </div>
+        <dl className="divide-y divide-dashed divide-line px-3 font-mono text-sm">
+          {rows.map(([k, v]) => (
+            <div key={k} className="flex justify-between gap-2 py-1.5">
+              <dt className="text-muted">{k}</dt>
+              <dd className="font-bold">{v}</dd>
+            </div>
           ))}
-        </ul>
-      </Reveal>
-      <Reveal delay={0.12} className={cn("relative", flip && "lg:order-1")}>
-        <div className="absolute -inset-4 -z-0 rounded-[2.2rem] bg-sand" aria-hidden="true" />
-        <div className="relative">
-          <LangContext.Provider value="en">{visual}</LangContext.Provider>
-        </div>
-      </Reveal>
+        </dl>
+        <div className="perforated h-3" aria-hidden="true" />
+      </div>
+      <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true, margin: "-80px" }}>
+        <PakkaStamp code="NK-2401" className="absolute right-[-0.5rem] bottom-6 w-36" />
+      </motion.div>
     </div>
   );
 }
 
-/* ----------------------------- inclusive design ---------------------------- */
+/* --------------------------------- design --------------------------------- */
 
-const PRINCIPLES = [
-  { Icon: Mic, t: "Speak, don't type", b: "Onboarding by voice: say your work, years and naka — the form fills itself." },
-  { Icon: Hand, t: "Pictures before words", b: "Hand-drawn tool pictograms for every trade. Recognisable without reading." },
-  { Icon: Ear, t: "Every screen can talk", b: "Jobs, agreements and schemes read aloud in Hindi, Marathi or English." },
-  { Icon: Languages, t: "One tap to your language", b: "Switch language anywhere. Employers' listings are shown in the worker's own." },
-  { Icon: MessageSquareText, t: "No smartphone needed", b: "Button phones get work by SMS and answer with one key. A Naka Saathi helps the rest." },
-  { Icon: MousePointerClick, t: "Big, forgiving targets", b: "48px controls, high contrast for sunlight, a bigger-text switch, and nothing hidden behind hover." },
+const RULES = [
+  ["Speak, don't type.", "Onboarding works by voice: say your work, years and naka, and the form fills itself."],
+  ["Pictures before words.", "Every trade has a drawn tool, so choosing work doesn't depend on reading."],
+  ["Every screen can talk.", "Jobs, agreements and schemes can be read aloud in Hindi, Marathi or English."],
+  ["Nothing important hides.", "Pay, hours and pay day are required fields. No “salary negotiable”."],
+  ["No phone? Still in.", "Button phones get work by SMS. A Naka Saathi helps people with no phone at all."],
+  ["Made for a cracked screen in sunlight.", "Big targets, strong contrast, a bigger-text switch, nothing behind hover."],
 ];
 
 const COMPARE: [string, string][] = [
-  ["Upload a résumé", "Kaam Card: trade, photos, vouches, days worked"],
+  ["Upload a résumé", "Show a Kaam Card: photos, vouches, days worked"],
   ["Type long forms in English", "Speak or tap pictures, in your language"],
-  ["Apply and wait", "Ask, agree and get a shared Pakka agreement"],
-  ["“Salary: negotiable”", "Pay, hours and pay day are required"],
+  ["Apply, then wait", "Ask, agree, and both keep the same agreement"],
+  ["“Salary: negotiable”", "Pay, hours and pay day shown up front"],
   ["Smartphone and data only", "Works by SMS and through a Naka Saathi"],
-  ["Rights live on government websites", "Schemes, papers and helplines in four taps"],
+  ["Rights on a government website", "Schemes, papers and helplines in four taps"],
 ];
 
-export function Inclusive() {
+export function DesignLedger() {
   return (
-    <section id="inclusive" aria-labelledby="inclusive-title" className="scroll-mt-20 border-y-2 border-ink bg-ink py-24 text-paper on-dark">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6">
-        <Reveal className="max-w-3xl">
-          <Eyebrow dark>Inclusive by design</Eyebrow>
-          <h2 id="inclusive-title" className="mt-3 font-display text-[2.4rem] leading-[1.05] font-extrabold sm:text-[3.2rem]">
-            Not another job portal. Built for a thumb, a voice and a cracked screen.
+    <section id="inclusive" aria-labelledby="design-title" className="scroll-mt-16 border-y-[3px] border-ink bg-ink py-24 text-paper on-dark">
+      <div className="mx-auto grid max-w-7xl gap-14 px-4 sm:px-6 lg:grid-cols-[1fr_1.1fr]">
+        <Reveal>
+          <h2 id="design-title" className="signboard-dark text-[2.8rem] sm:text-[3.8rem]">
+            Not another job portal.
           </h2>
+          <p className="mt-5 max-w-md text-lg leading-relaxed text-paper/75">Six rules we held every screen to.</p>
+          <ol className="mt-10 space-y-6">
+            {RULES.map(([t, b], i) => (
+              <li key={t} className="grid grid-cols-[2.5rem_1fr] gap-3">
+                <span className="font-mono text-lg font-bold text-marigold">{String(i + 1).padStart(2, "0")}</span>
+                <span>
+                  <span className="block font-display text-[1.45rem] leading-tight font-bold">{t}</span>
+                  <span className="mt-1 block leading-relaxed text-paper/70">{b}</span>
+                </span>
+              </li>
+            ))}
+          </ol>
         </Reveal>
-
-        <ul className="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {PRINCIPLES.map(({ Icon, t, b }, i) => (
-            <li key={t}>
-              <Reveal delay={(i % 3) * 0.08} className="h-full">
-                <div className="h-full rounded-[1.6rem] border-2 border-white/15 bg-white/[0.04] p-6 transition-colors hover:border-marigold/60">
-                  <span className="flex size-12 items-center justify-center rounded-2xl bg-marigold text-ink">
-                    <Icon className="size-6" aria-hidden="true" />
-                  </span>
-                  <h3 className="mt-4 font-display text-xl font-extrabold">{t}</h3>
-                  <p className="mt-2 leading-relaxed text-paper/70">{b}</p>
-                </div>
-              </Reveal>
-            </li>
-          ))}
-        </ul>
-
-        <Reveal className="mt-16">
-          <div className="overflow-hidden rounded-[1.6rem] border-2 border-white/15">
+        <Reveal delay={0.1}>
+          <div className="rotate-[0.6deg] border-2 border-ink bg-paper p-1 text-ink shadow-[8px_8px_0_0_var(--color-marigold)]">
             <table className="w-full text-left">
-              <caption className="sr-only">A typical job portal compared with Naka</caption>
-              <thead>
-                <tr className="bg-white/[0.06]">
-                  <th scope="col" className="w-1/2 p-4 font-display text-lg font-extrabold text-paper/60">
-                    A typical job portal
-                  </th>
-                  <th scope="col" className="w-1/2 p-4 font-display text-lg font-extrabold text-marigold">
-                    Naka
-                  </th>
+              <caption className="border-b-2 border-ink bg-marigold px-4 py-3 text-left font-display text-xl font-bold">
+                A typical job portal vs RozGhar
+              </caption>
+              <thead className="sr-only">
+                <tr>
+                  <th scope="col">Typical job portal</th>
+                  <th scope="col">RozGhar</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody className="divide-y-2 divide-dashed divide-line">
                 {COMPARE.map(([a, b]) => (
-                  <tr key={a} className="border-t border-white/10">
-                    <td className="p-4 text-paper/60">
-                      <span className="flex items-start gap-2">
-                        <X className="mt-0.5 size-5 shrink-0 text-danger" aria-hidden="true" />
-                        {a}
+                  <tr key={a} className="align-top">
+                    <td className="w-[42%] px-4 py-3 font-mono text-[0.9rem] text-ink/50">
+                      <span className="flex gap-2">
+                        <X className="mt-0.5 size-4 shrink-0 text-bus" aria-hidden="true" />
+                        <span className="line-through decoration-bus/60">{a}</span>
                       </span>
                     </td>
-                    <td className="p-4 font-bold">
-                      <span className="flex items-start gap-2">
-                        <Check className="mt-0.5 size-5 shrink-0 text-[#3ddc84]" aria-hidden="true" />
+                    <td className="px-4 py-3 font-bold">
+                      <span className="flex gap-2">
+                        <Check className="mt-0.5 size-4 shrink-0 text-leaf" strokeWidth={3} aria-hidden="true" />
                         {b}
                       </span>
                     </td>
@@ -534,52 +428,51 @@ export function Inclusive() {
 
 export function DemoCta() {
   return (
-    <section aria-labelledby="cta-title" className="bg-marigold py-24">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6">
-        <div className="grid items-center gap-10 lg:grid-cols-[1.2fr_1fr]">
+    <section aria-labelledby="cta-title" className="relative overflow-hidden bg-bus py-24">
+      <div className="paper-texture absolute inset-0 opacity-60" aria-hidden="true" />
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
+        <div className="grid items-center gap-12 lg:grid-cols-[1fr_1.1fr]">
           <Reveal>
-            <h2 id="cta-title" className="font-display text-[2.6rem] leading-[1.02] font-extrabold sm:text-[3.6rem]">
-              See both sides of the naka, at the same time.
-            </h2>
-            <p className="mt-5 max-w-xl text-lg leading-relaxed text-ink/80">
-              The live demo puts Ramesh&apos;s phone, Arjun&apos;s button phone and Priya&apos;s employer site side by side. Post a job on one —
-              watch it arrive on the other, in another language.
-            </p>
-            <div className="mt-8 flex flex-wrap gap-3">
-              <ButtonLink href="/demo" variant="ink" size="xl">
-                <Play className="size-5 fill-paper" aria-hidden="true" />
-                Open the live demo
-              </ButtonLink>
-              <ButtonLink href="/employer" variant="outline" size="xl">
-                Employer site <ArrowRight className="size-5" aria-hidden="true" />
-              </ButtonLink>
+            <div className="relative rotate-[-1deg] bg-paper p-8 shadow-[10px_10px_0_0_var(--color-ink)]">
+              <TornEdge className="absolute inset-x-0 -top-4 text-paper" flip />
+              <h2 id="cta-title" className="signboard text-[2.6rem] sm:text-[3.4rem]">
+                See both sides of the naka at once.
+              </h2>
+              <p className="mt-4 text-lg leading-relaxed text-ink/75">
+                The live demo puts Ramesh&apos;s phone, Arjun&apos;s button phone and Priya&apos;s laptop side by side. Post a job on one and
+                watch it arrive on the other, in another language.
+              </p>
+              <div className="mt-7 flex flex-wrap gap-3">
+                <ButtonLink href="/demo" variant="ink" size="lg">
+                  <Play className="size-5 fill-paper" aria-hidden="true" />
+                  Open the live demo
+                </ButtonLink>
+                <ButtonLink href="/employer" variant="outline" size="lg">
+                  Employer site <ArrowRight className="size-5" aria-hidden="true" />
+                </ButtonLink>
+              </div>
+              <TornEdge className="absolute inset-x-0 -bottom-4 text-paper" />
             </div>
           </Reveal>
-          <Reveal delay={0.1}>
-            <ul className="grid gap-3">
-              {[
-                { href: "/worker/welcome", Icon: Mic, t: "Worker onboarding by voice", s: "Pick a language, say your work" },
-                { href: "/worker", Icon: Smartphone, t: "Worker app", s: "Work feed, Kaam Card, Khata, rights" },
-                { href: "/saathi", Icon: Users, t: "Naka Saathi app", s: "For the helper with the one smartphone" },
-                { href: "/employer/post", Icon: Briefcase, t: "Post work", s: "With live preview in Hindi & Marathi" },
-              ].map(({ href, Icon, t, s }) => (
-                <li key={href}>
-                  <Link
-                    href={href}
-                    className="group flex items-center gap-4 rounded-[1.4rem] border-2 border-ink bg-paper p-4 shadow-[0_4px_0_0_var(--color-ink)] transition-transform hover:-translate-y-0.5"
-                  >
-                    <span className="flex size-12 shrink-0 items-center justify-center rounded-2xl bg-ink text-marigold">
-                      <Icon className="size-6" aria-hidden="true" />
-                    </span>
-                    <span className="min-w-0 flex-1">
-                      <span className="block font-display text-lg font-extrabold">{t}</span>
-                      <span className="block text-sm text-muted">{s}</span>
-                    </span>
-                    <ArrowRight className="size-5 transition-transform group-hover:translate-x-1" aria-hidden="true" />
-                  </Link>
-                </li>
-              ))}
-            </ul>
+          <Reveal delay={0.1} className="relative pb-10">
+            <LaptopFrame url="rozghar.app/employer" className="max-w-xl">
+              <MiniDashboard />
+            </LaptopFrame>
+            <div className="absolute -bottom-2 right-0 w-[150px] sm:right-6 sm:w-[170px]">
+              <AndroidFrame className="w-full rounded-[1.6rem] p-[5px]" screenClassName="rounded-[1.3rem] h-[300px]">
+                <div className="space-y-2 p-2" lang="hi">
+                  <div className="rounded-lg bg-ink p-2 text-[0.6rem] text-paper">
+                    <p className="font-bold">प्रिया नायर आपको काम पर रखना चाहती हैं</p>
+                    <p className="mt-1 inline-block rounded bg-marigold px-1.5 py-0.5 font-bold text-ink">ऑफ़र देखें</p>
+                  </div>
+                  <div className="rounded-lg border border-ink/15 bg-white p-2">
+                    <p className="font-display text-[0.8rem] font-bold">पेंटिंग का काम</p>
+                    <p className="font-display text-lg leading-none font-bold">₹900</p>
+                    <p className="mt-1 text-[0.55rem] font-bold text-leaf">जाँचा हुआ · उसी दिन पैसा</p>
+                  </div>
+                </div>
+              </AndroidFrame>
+            </div>
           </Reveal>
         </div>
       </div>
@@ -587,18 +480,54 @@ export function DemoCta() {
   );
 }
 
+function MiniDashboard() {
+  return (
+    <div className="bg-[#f7f1e4] p-4 text-ink">
+      <div className="flex items-center gap-2">
+        <LogoMark className="size-6" />
+        <span className="font-display text-sm font-bold">RozGhar · for employers</span>
+        <span className="ml-auto rounded-full bg-ink px-2 py-0.5 text-[0.6rem] font-bold text-paper">Dashboard</span>
+      </div>
+      <p className="mt-3 font-display text-xl leading-tight font-bold">Hire people you can trust.</p>
+      <div className="mt-3 grid grid-cols-3 gap-2">
+        {[
+          ["39", "free today"],
+          ["1", "open job"],
+          ["1", "pakka"],
+        ].map(([n, l]) => (
+          <div key={l} className="rounded-lg border border-ink/10 bg-white p-2">
+            <p className="font-display text-lg leading-none font-bold">{n}</p>
+            <p className="text-[0.6rem] font-bold text-muted">{l}</p>
+          </div>
+        ))}
+      </div>
+      <div className="mt-3 flex items-center gap-2 rounded-lg border-2 border-ink bg-white p-2">
+        <Portrait who="ramesh" className="size-8" />
+        <div className="min-w-0 flex-1">
+          <p className="text-xs font-bold">Ramesh Yadav wants this work</p>
+          <p className="text-[0.6rem] text-muted">Painting · ₹900 · NK-2401</p>
+        </div>
+        <span className="rounded-md bg-leaf px-2 py-1 text-[0.6rem] font-bold text-white">Confirm</span>
+      </div>
+    </div>
+  );
+}
+
 export function Footer() {
   return (
-    <footer className="border-t-2 border-ink bg-ink py-12 text-paper on-dark">
-      <div className="mx-auto flex max-w-7xl flex-col gap-8 px-4 sm:px-6 md:flex-row md:items-start md:justify-between">
+    <footer className="border-t-[3px] border-ink bg-ink py-14 text-paper on-dark">
+      <div className="mx-auto flex max-w-7xl flex-col gap-10 px-4 sm:px-6 md:flex-row md:items-start md:justify-between">
         <div className="max-w-md">
           <Logo tone="marigold" />
           <p className="mt-4 leading-relaxed text-paper/70">
-            The labour naka, in your pocket. A frontend prototype for Artemis 2026 (ACM KJSSE · Abhiyantriki), Problem Statement 2 —
+            The labour naka, in your pocket. A frontend prototype for Artemis 2026 (ACM KJSSE · Abhiyantriki), Problem Statement 2,
             “Beyond the Waiting Line”.
           </p>
+          <p lang="hi" className="mt-4 font-poster text-xl text-marigold">
+            काम मिलेगा, इज़्ज़त से।
+          </p>
         </div>
-        <nav aria-label="Footer" className="grid grid-cols-2 gap-x-12 gap-y-2 font-bold">
+        <nav aria-label="Footer" className="grid grid-cols-2 gap-x-14 gap-y-2.5 font-bold">
           <Link href="/demo" className="hover:text-marigold">Live demo</Link>
           <Link href="/worker" className="hover:text-marigold">Worker app</Link>
           <Link href="/employer" className="hover:text-marigold">For employers</Link>
@@ -607,8 +536,8 @@ export function Footer() {
           <Link href="/worker/welcome" className="hover:text-marigold">Voice onboarding</Link>
         </nav>
       </div>
-      <p className="mx-auto mt-10 max-w-7xl px-4 text-sm text-paper/50 sm:px-6">
-        All people, jobs, employers and help centres shown are sample data. Scheme details are simplified — confirm with official
+      <p className="mx-auto mt-12 max-w-7xl px-4 text-sm text-paper/45 sm:px-6">
+        All people, jobs, employers and help centres shown are sample data. Scheme details are simplified; confirm with official
         sources. Helpline numbers are real public helplines.
       </p>
     </footer>

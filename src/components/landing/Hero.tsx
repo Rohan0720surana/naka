@@ -1,189 +1,109 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ArrowRight, BadgeCheck, Mic, Play, ShieldCheck, ShieldX, Smartphone } from "lucide-react";
-import { LogoMark } from "@/components/brand/Logo";
+import { ArrowRight, Play } from "lucide-react";
+import { BestBus, Rickshaw, SKYLINE_PATH } from "@/components/art/Scenes";
+import { DemoReel } from "@/components/landing/DemoReel";
 import { ButtonLink } from "@/components/ui/primitives";
-import { JobCard } from "@/components/worker/JobCard";
-import { SEED_JOBS } from "@/lib/data/jobs";
-import { LangContext } from "@/lib/hooks";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
 export function Hero() {
-  const job = SEED_JOBS.find((j) => j.id === "j1")!;
   return (
-    <section className="relative overflow-hidden" aria-labelledby="hero-title">
-      <div className="absolute inset-0 paper-grain opacity-70" aria-hidden="true" />
-      <div className="relative mx-auto grid max-w-7xl items-center gap-12 px-4 pt-10 pb-20 sm:px-6 lg:grid-cols-[1.1fr_1fr] lg:pt-16 lg:pb-28">
+    <section className="paper-texture relative overflow-hidden bg-gradient-to-b from-paper via-paper to-[#ffe2bf]" aria-labelledby="hero-title">
+      <svg viewBox="0 0 400 90" preserveAspectRatio="none" className="absolute inset-x-0 bottom-3 h-40 w-full" aria-hidden="true">
+        <path d={SKYLINE_PATH} fill="#2b3166" opacity="0.12" />
+      </svg>
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-3 bg-ink/85" aria-hidden="true" />
+      <motion.div
+        className="pointer-events-none absolute bottom-2 left-0 w-28 sm:w-36"
+        initial={{ x: "-30vw" }}
+        animate={{ x: "115vw" }}
+        transition={{ duration: 22, repeat: Infinity, ease: "linear", delay: 1 }}
+        aria-hidden="true"
+      >
+        <BestBus className="w-full" />
+      </motion.div>
+      <motion.div
+        className="pointer-events-none absolute bottom-2 left-0 w-14 sm:w-16"
+        initial={{ x: "115vw" }}
+        animate={{ x: "-20vw" }}
+        transition={{ duration: 15, repeat: Infinity, ease: "linear", delay: 6 }}
+        aria-hidden="true"
+      >
+        <Rickshaw className="w-full -scale-x-100" />
+      </motion.div>
+      <div className="relative mx-auto grid max-w-7xl items-center gap-14 px-4 pt-10 pb-28 sm:px-6 lg:grid-cols-[1.15fr_1fr] lg:pt-16 lg:pb-32">
         <div>
           <motion.p
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, ease: EASE }}
-            className="inline-flex items-center gap-2 rounded-full border-2 border-ink bg-white px-3 py-1.5 text-sm font-bold"
+            lang="hi"
+            initial={{ opacity: 0, rotate: -4, y: 10 }}
+            animate={{ opacity: 1, rotate: -2, y: 0 }}
+            transition={{ duration: 0.6, ease: EASE }}
+            className="inline-block rounded-md bg-bus px-3 py-1 font-poster text-[1.35rem] leading-tight text-white shadow-[3px_3px_0_0_var(--color-ink)]"
           >
-            <span className="size-2 rounded-full bg-leaf" aria-hidden="true" />
-            For daily-wage workers, hawkers &amp; the people who hire them
+            नाके का काम, अब फ़ोन पर
           </motion.p>
           <motion.h1
             id="hero-title"
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.08, ease: EASE }}
-            className="mt-5 font-display text-[2.7rem] leading-[1.02] font-extrabold tracking-tight sm:text-[3.6rem] lg:text-[4.4rem]"
+            className="signboard mt-6 text-[3.2rem] sm:text-[4.2rem] lg:text-[5rem]"
           >
-            Work shouldn&apos;t depend on{" "}
-            <span className="relative inline-block">
-              <span className="relative z-10">who walks past</span>
-              <motion.span
-                className="absolute inset-x-[-0.15em] bottom-[0.08em] z-0 h-[0.38em] origin-left rounded-sm bg-marigold"
-                initial={{ scaleX: 0 }}
-                animate={{ scaleX: 1 }}
-                transition={{ duration: 0.7, delay: 0.55, ease: EASE }}
-                aria-hidden="true"
-              />
-            </span>{" "}
-            the naka.
+            Work shouldn&apos;t depend on who walks past the naka.
           </motion.h1>
           <motion.p
             initial={{ opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2, ease: EASE }}
-            className="mt-6 max-w-xl text-[1.15rem] leading-relaxed text-ink/80"
+            className="mt-7 max-w-xl text-[1.15rem] leading-relaxed text-ink/80"
           >
-            Naka puts the roadside hiring point in every worker&apos;s pocket: nearby work with clear pay, a Kaam Card instead of a
-            résumé, deals both sides keep, and rights in plain words — by voice, in Hindi, Marathi and English. Even on a button phone.
+            Every morning, skilled workers across Mumbai stand at roadside nakas hoping to be picked. RozGhar puts that hiring point on
+            their phone: pay, hours and a safety check before they go, a card that shows their work, and their rights in plain Hindi
+            or Marathi. It even works on a basic button phone.
           </motion.p>
           <motion.div
             initial={{ opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.3, ease: EASE }}
-            className="mt-8 flex flex-wrap gap-3"
+            className="mt-9 flex flex-col gap-3 sm:flex-row sm:flex-wrap"
           >
-            <ButtonLink href="/demo" size="xl">
+            <ButtonLink href="/demo" size="xl" className="w-full sm:w-auto">
               <Play className="size-5 fill-ink" aria-hidden="true" />
-              See the live demo
+              Watch the live demo
             </ButtonLink>
-            <ButtonLink href="/worker/welcome" variant="outline" size="xl">
-              Try the worker app
+            <ButtonLink href="/worker/welcome" variant="outline" size="xl" className="w-full sm:w-auto">
+              Open the worker app
               <ArrowRight className="size-5" aria-hidden="true" />
             </ButtonLink>
           </motion.div>
-          <motion.ul
-            initial="hidden"
-            animate="show"
-            variants={{ show: { transition: { staggerChildren: 0.08, delayChildren: 0.45 } } }}
-            className="mt-8 flex flex-wrap gap-x-6 gap-y-2 text-[0.95rem] font-bold text-ink/75"
+          <motion.dl
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.5 }}
+            className="mt-10 grid max-w-lg grid-cols-3 divide-x-2 divide-ink/10 border-y-2 border-ink/10 py-3"
           >
             {[
-              { Icon: Mic, t: "Speak, don't type" },
-              { Icon: BadgeCheck, t: "No résumé needed" },
-              { Icon: Smartphone, t: "Works by SMS too" },
-            ].map(({ Icon, t }) => (
-              <motion.li key={t} variants={{ hidden: { opacity: 0, y: 6 }, show: { opacity: 1, y: 0 } }} className="flex items-center gap-2">
-                <Icon className="size-5 text-marigold-deep" aria-hidden="true" />
-                {t}
-              </motion.li>
+              ["3", "languages, by voice"],
+              ["0", "résumés needed"],
+              ["1 key", "to answer by SMS"],
+            ].map(([k, v]) => (
+              <div key={v} className="px-3 first:pl-0">
+                <dt className="sr-only">{v}</dt>
+                <dd>
+                  <span className="block font-display text-[2rem] leading-none font-bold">{k}</span>
+                  <span className="text-sm font-bold text-ink/60">{v}</span>
+                </dd>
+              </div>
             ))}
-          </motion.ul>
+          </motion.dl>
         </div>
 
-        <HeroVisual job={job} />
+        <motion.div initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.15, ease: EASE }}>
+          <DemoReel />
+        </motion.div>
       </div>
     </section>
-  );
-}
-
-function HeroVisual({ job }: { job: (typeof SEED_JOBS)[number] }) {
-  return (
-    <div className="relative mx-auto w-full max-w-[480px] pt-12 pb-16" aria-hidden="true">
-      <motion.div
-        className="absolute top-20 left-1/2 size-[380px] -translate-x-1/2 rounded-full bg-marigold"
-        initial={{ scale: 0.6, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        transition={{ duration: 1, ease: EASE }}
-      />
-      <motion.div
-        className="absolute top-28 left-1/2 size-[300px] -translate-x-1/2 rounded-full border-[3px] border-dashed border-ink/25"
-        animate={{ rotate: 360 }}
-        transition={{ duration: 60, repeat: Infinity, ease: "linear" }}
-      />
-
-      <motion.div
-        initial={{ y: 60, rotate: 6, opacity: 0 }}
-        animate={{ y: 0, rotate: -3, opacity: 1 }}
-        transition={{ type: "spring", damping: 18, stiffness: 90, delay: 0.2 }}
-        className="relative mx-auto w-[320px] rounded-[2.6rem] border-[3px] border-ink bg-ink p-2.5 shadow-[0_50px_80px_-30px_rgba(22,26,61,0.65)]"
-      >
-        <div className="overflow-hidden rounded-[2.1rem] bg-paper" lang="hi">
-          <LangContext.Provider value="hi">
-            <div className="flex items-center gap-2 border-b-2 border-ink/8 px-3.5 pt-6 pb-2.5">
-              <LogoMark className="size-8" />
-              <div className="leading-tight">
-                <p className="font-display text-sm font-extrabold">नाका</p>
-                <p className="text-[0.68rem] font-bold text-muted">घाटकोपर नाका</p>
-              </div>
-              <span className="ml-auto rounded-full border-2 border-ink bg-marigold px-2 py-0.5 text-[0.7rem] font-bold">हिंदी</span>
-            </div>
-            <div className="space-y-3 p-3">
-              <p className="font-display text-xl font-extrabold">नमस्ते, रमेश</p>
-              <div className="flex items-center justify-between rounded-2xl bg-ink px-3 py-2.5 text-paper">
-                <span className="text-[0.8rem] font-bold">आज काम के लिए फ़्री हैं?</span>
-                <span className="flex h-7 w-12 items-center justify-end rounded-full bg-marigold p-0.5">
-                  <span className="size-6 rounded-full border-2 border-ink bg-white" />
-                </span>
-              </div>
-              <JobCard job={job} preview />
-            </div>
-          </LangContext.Provider>
-        </div>
-      </motion.div>
-
-      <FloatChip className="top-[7.5rem] -right-2 sm:-right-10" delay={0.9}>
-        <ShieldCheck className="size-5 text-leaf" />
-        <span>
-          Safety check <b className="text-leaf">Checked</b>
-        </span>
-      </FloatChip>
-      <FloatChip className="bottom-2 -right-2 sm:-right-8" delay={1.1} tone="danger">
-        <ShieldX className="size-5" />
-        <span>“Pay ₹15,000 for visa” — scam</span>
-      </FloatChip>
-      <FloatChip className="top-0 -left-2 sm:-left-6" delay={1.3} tone="ink">
-        <Mic className="size-5 text-marigold" />
-        <span lang="hi">“मैं पेंटर हूँ, 12 साल…”</span>
-      </FloatChip>
-    </div>
-  );
-}
-
-function FloatChip({
-  children,
-  className,
-  delay,
-  tone = "white",
-}: {
-  children: React.ReactNode;
-  className: string;
-  delay: number;
-  tone?: "white" | "danger" | "ink";
-}) {
-  const tones = { white: "bg-white text-ink", danger: "bg-danger text-white", ink: "bg-ink text-paper" };
-  return (
-    <motion.div
-      className={`absolute z-10 ${className}`}
-      initial={{ opacity: 0, scale: 0.8, y: 10 }}
-      animate={{ opacity: 1, scale: 1, y: 0 }}
-      transition={{ type: "spring", damping: 14, delay }}
-    >
-      <motion.div
-        animate={{ y: [0, -6, 0] }}
-        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: delay + 0.5 }}
-        className={`flex items-center gap-2 rounded-2xl border-2 border-ink px-3.5 py-2.5 text-[0.85rem] font-bold whitespace-nowrap shadow-[0_4px_0_0_var(--color-ink)] ${tones[tone]}`}
-      >
-        {children}
-      </motion.div>
-    </motion.div>
   );
 }

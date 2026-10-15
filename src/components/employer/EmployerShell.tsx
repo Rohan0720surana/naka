@@ -3,12 +3,12 @@
 import { AnimatePresence, motion } from "framer-motion";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { Bell, CirclePlus, LayoutDashboard, Search, X } from "lucide-react";
+import { Bell, CirclePlus, House, LayoutDashboard, Search, X } from "lucide-react";
 import { useEffect, type ReactNode } from "react";
 import { Avatar } from "@/components/Avatar";
 import { Logo } from "@/components/brand/Logo";
 import { EMPLOYERS, DEMO_EMPLOYER_ID } from "@/lib/data/jobs";
-import { LangContext, useHydrated } from "@/lib/hooks";
+import { LangContext, useHydrated, useInFrame } from "@/lib/hooks";
 import { useDemo } from "@/lib/store";
 import { cn } from "@/lib/utils";
 
@@ -23,12 +23,24 @@ export function EmployerShell({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const unread = useDemo((s) => s.notices.filter((n) => n.to === "employer" && !n.read).length);
   const me = EMPLOYERS[DEMO_EMPLOYER_ID]!;
+  const inFrame = useInFrame();
 
   return (
     <LangContext.Provider value="en">
       <div className="min-h-dvh bg-[#f7f1e4]">
         <header className="sticky top-0 z-30 border-b-2 border-ink/10 bg-paper/95 backdrop-blur">
           <div className="mx-auto flex h-16 max-w-6xl items-center gap-4 px-4 sm:px-6">
+            {inFrame ? null : (
+              <Link
+                href="/"
+                className="inline-flex h-10 shrink-0 items-center gap-1.5 rounded-full border-2 border-line bg-white px-3 text-sm font-bold hover:border-ink"
+                title="Main site"
+              >
+                <House className="size-4" aria-hidden="true" />
+                <span className="hidden lg:inline">Main site</span>
+                <span className="sr-only lg:hidden">Main site</span>
+              </Link>
+            )}
             <Link href="/employer" className="rounded-xl">
               <Logo sub="for employers" />
             </Link>
