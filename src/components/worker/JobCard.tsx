@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { BadgeCheck, CalendarDays, Clock, MapPin, ShieldX } from "lucide-react";
+import { ScamTape } from "@/components/art/Moments";
 import { TradeIcon } from "@/components/icons/TradeIcon";
 import { SpeakButton } from "@/components/SpeakButton";
 import { ShieldBadge, Tag } from "@/components/ui/primitives";
@@ -45,6 +46,7 @@ export function JobCard({
         !preview && "hover:-translate-y-0.5 hover:shadow-pop",
       )}
     >
+      {danger && !preview ? <ScamTape className="top-[56%]" /> : null}
       {danger ? (
         <div className="flex items-center gap-2 bg-danger px-4 py-2 text-[0.9rem] font-extrabold text-white">
           <ShieldX className="size-5" aria-hidden="true" />

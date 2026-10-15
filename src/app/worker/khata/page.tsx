@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { ArrowRight, CircleCheck, HardHat, Hourglass, Plus } from "lucide-react";
 import { useState } from "react";
+import { CoinDrop } from "@/components/art/Moments";
 import { Sheet } from "@/components/Sheet";
 import { SpeakButton } from "@/components/SpeakButton";
 import { Button, Card, Chip, SectionTitle, Tag } from "@/components/ui/primitives";
@@ -20,6 +21,11 @@ export default function KhataPage() {
   const markKhataPaid = useDemo((s) => s.markKhataPaid);
   const logged = useDemo((s) => khataDays(s));
   const [adding, setAdding] = useState(false);
+  const [coinKey, setCoinKey] = useState(0);
+  const markPaid = (id: string) => {
+    markKhataPaid(id);
+    setCoinKey((k) => k + 1);
+  };
 
   const now = new Date();
   const monthKey = isoDaysAgo(0).slice(0, 7);
@@ -67,7 +73,10 @@ export default function KhataPage() {
           <p className="text-[0.95rem] font-bold text-paper/75">
             {t("earnedMonth")} · {monthLabel(now, lang)}
           </p>
-          <p className="mt-1 font-display text-[2.8rem] leading-none font-extrabold text-marigold tabular">{money(earned)}</p>
+          <div className="mt-1 flex items-end justify-between gap-3">
+            <p className="font-display text-[2.8rem] leading-none font-extrabold text-marigold tabular">{money(earned)}</p>
+            <CoinDrop count={5} replayKey={coinKey} className="mb-1" />
+          </div>
           <p className="mt-2 font-bold">{t("daysWorked", { n: thisMonth.length })}</p>
           {pendingTotal > 0 ? (
             <div className="mt-4 flex items-center justify-between rounded-2xl bg-white/10 p-3">
@@ -84,10 +93,10 @@ export default function KhataPage() {
       {dues.length ? (
         <section className="space-y-2" aria-label={t("pendingDues")}>
           {dues.map(([name, d]) => (
-            <Card key={name} className="flex flex-wrap items-center gap-3 border-alert/30 bg-alert-soft p-4">
-              <p className="min-w-0 flex-1 font-bold">{t("dueFrom", { amount: d.amount.toLocaleString("en-IN"), name })}</p>
+            <Card key={name} className="flex flex-col gap-3 border-alert/30 bg-alert-soft p-4">
+              <p className="font-bold leading-snug">{t("dueFrom", { amount: d.amount.toLocaleString("en-IN"), name })}</p>
               <div className="flex gap-2">
-                <Button size="sm" variant="leaf" onClick={() => d.ids.forEach((id) => markKhataPaid(id))}>
+                <Button size="sm" variant="leaf" onClick={() => d.ids.forEach((id) => markPaid(id))}>
                   <CircleCheck className="size-4" aria-hidden="true" />
                   {t("markPaid")}
                 </Button>
@@ -201,7 +210,7 @@ export default function KhataPage() {
                 ) : (
                   <button
                     type="button"
-                    onClick={() => markKhataPaid(k.id)}
+                    onClick={() => markPaid(k.id)}
                     className="rounded-full bg-alert-soft px-2.5 py-1 text-[0.8rem] font-bold text-alert underline-offset-2 hover:underline"
                   >
                     {t("legendUnpaid")} · {t("markPaid")}

@@ -3,12 +3,12 @@
 import { AnimatePresence, motion } from "framer-motion";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { BellRing, BookOpen, BriefcaseBusiness, IdCard, Landmark, Languages, WifiOff, X } from "lucide-react";
+import { BellRing, BookOpen, BriefcaseBusiness, House, IdCard, Landmark, Languages, WifiOff, X } from "lucide-react";
 import { useEffect, useState, type ReactNode } from "react";
 import { LogoMark } from "@/components/brand/Logo";
 import { LanguageSheet } from "@/components/worker/LanguageSheet";
 import { NAKAS } from "@/lib/data/places";
-import { useHydrated, useOnline, useT } from "@/lib/hooks";
+import { useHydrated, useInFrame, useOnline, useT } from "@/lib/hooks";
 import { LANGS, type TKey } from "@/lib/i18n";
 import { useDemo } from "@/lib/store";
 import { cn } from "@/lib/utils";
@@ -72,7 +72,13 @@ export function AppShell({
 function Splash() {
   return (
     <div className="flex flex-1 flex-col items-center justify-center gap-4 p-10" aria-busy="true" aria-live="polite">
-      <LogoMark className="size-16" />
+      <motion.div
+        initial={{ scale: 1.9, rotate: -14, opacity: 0 }}
+        animate={{ scale: 1, rotate: 0, opacity: 1 }}
+        transition={{ type: "spring", stiffness: 480, damping: 17 }}
+      >
+        <LogoMark className="size-16" />
+      </motion.div>
       <div className="h-2 w-32 overflow-hidden rounded-full bg-sand">
         <motion.div
           className="h-full w-1/2 rounded-full bg-marigold"
@@ -93,12 +99,23 @@ function Header({ mode }: { mode: "worker" | "saathi" }) {
   const [langOpen, setLangOpen] = useState(false);
   const naka = NAKAS[me.naka] ?? NAKAS["ghatkopar-naka"]!;
   const native = LANGS.find((l) => l.id === lang)?.native;
+  const inFrame = useInFrame();
 
   return (
     <header className="sticky top-0 z-30 border-b-2 border-ink/8 bg-paper/95 px-4 py-2.5 backdrop-blur no-print">
-      <div className="flex items-center gap-2.5">
+      <div className="flex items-center gap-2">
+        {inFrame ? null : (
+          <Link
+            href="/"
+            className="-ml-1 inline-flex size-10 shrink-0 items-center justify-center rounded-full border-2 border-line bg-white hover:border-ink"
+            aria-label="Main site"
+            title="Main site"
+          >
+            <House className="size-5" aria-hidden="true" />
+          </Link>
+        )}
         <Link href={mode === "worker" ? "/worker" : "/saathi"} className="flex min-w-0 items-center gap-2.5 rounded-xl">
-          <LogoMark className="size-10" />
+          <LogoMark className="size-9" />
           <span className="min-w-0 leading-tight">
             <span className="block font-display text-lg font-extrabold">
               {mode === "saathi" ? t("saathiTitle") : t("appName")}
@@ -113,7 +130,7 @@ function Header({ mode }: { mode: "worker" | "saathi" }) {
             aria-pressed={largeText}
             aria-label={t("biggerText")}
             className={cn(
-              "inline-flex h-11 min-w-11 items-center justify-center rounded-full border-2 px-2 font-display font-extrabold",
+              "inline-flex h-10 min-w-10 items-center justify-center rounded-full border-2 px-2 font-display font-extrabold",
               largeText ? "border-ink bg-ink text-paper" : "border-line bg-white",
             )}
           >
@@ -123,11 +140,11 @@ function Header({ mode }: { mode: "worker" | "saathi" }) {
           <button
             type="button"
             onClick={() => setLangOpen(true)}
-            className="inline-flex h-11 items-center gap-1.5 rounded-full border-2 border-ink bg-marigold px-3 font-bold"
+            className="inline-flex h-10 items-center gap-1.5 rounded-full border-2 border-ink bg-marigold px-3 font-bold"
             aria-label={`${t("language")}: ${native}`}
           >
             <Languages className="size-5" aria-hidden="true" />
-            <span>{native}</span>
+            <span>{lang === "en" ? "EN" : native}</span>
           </button>
         </div>
       </div>

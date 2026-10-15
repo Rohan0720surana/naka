@@ -23,7 +23,7 @@ const KEYS: [string, string][] = [
 ];
 
 /**
- * Arjun's button phone. Naka reaches him by SMS in Hindi; he answers with a
+ * Arjun's button phone. RozGhar reaches him by SMS in Hindi; he answers with a
  * single key — 1 for yes, 2 for no, 0 for help.
  */
 export function FeaturePhone() {
@@ -52,7 +52,7 @@ export function FeaturePhone() {
         className="relative w-[270px] rounded-[2.6rem] border-[3px] border-ink bg-[#252a52] px-4 pt-7 pb-6 shadow-[0_40px_80px_-30px_rgba(22,26,61,0.6)]"
       >
         <div className="mx-auto mb-3 h-1.5 w-16 rounded-full bg-black/40" aria-hidden="true" />
-        <p className="mb-2 text-center text-[0.65rem] font-extrabold tracking-[0.3em] text-white/50">NAKA · SMS</p>
+        <p className="mb-2 text-center text-[0.65rem] font-extrabold tracking-[0.3em] text-white/50">ROZGHAR · SMS</p>
         <div className="overflow-hidden rounded-xl border-4 border-[#14172e] bg-[#c8d6b0] shadow-inner">
           <div className="flex items-center justify-between bg-[#b5c59b] px-2 py-1 font-mono text-[0.65rem] font-bold text-[#22301a]">
             <span aria-hidden="true">▂▄▆█</span>
@@ -122,7 +122,7 @@ export function FeaturePhone() {
         Show English translation
       </label>
       <p className="max-w-[270px] text-center text-sm text-muted">
-        Arjun has no smartphone. Naka sends work by SMS in Hindi; he replies with one key: <strong>1</strong> yes, <strong>2</strong> no,{" "}
+        Arjun has no smartphone. RozGhar sends work by SMS in Hindi; he replies with one key: <strong>1</strong> yes, <strong>2</strong> no,{" "}
         <strong>0</strong> help.
       </p>
     </div>

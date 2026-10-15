@@ -148,7 +148,7 @@ export function FairMeter({ job, fair }: { job: Job; fair: Assessment["fair"] })
         <motion.div
           className="absolute -top-8 flex -translate-x-1/2 flex-col items-center"
           initial={{ left: "0%" }}
-          animate={{ left: `${fair.position * 100}%` }}
+          animate={{ left: `${Math.min(92, Math.max(8, fair.position * 100))}%` }}
           transition={{ type: "spring", damping: 18, stiffness: 120, delay: 0.15 }}
         >
           <span className="rounded-lg bg-ink px-2 py-1 text-[0.78rem] font-extrabold whitespace-nowrap text-paper tabular">

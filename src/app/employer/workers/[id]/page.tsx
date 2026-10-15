@@ -142,7 +142,7 @@ export default function WorkerProfile() {
                         </p>
                         <p className="text-sm text-paper/75">
                           Agreement {agreement.code}
-                          {agreement.via === "sms" ? " · sent by SMS" : " · sent to the Naka app"}
+                          {agreement.via === "sms" ? " · sent by SMS" : " · sent to the RozGhar app"}
                         </p>
                       </div>
                     </motion.div>

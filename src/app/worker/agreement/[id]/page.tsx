@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import { ArrowLeft, Check, CircleCheck, Hourglass, Scale, Share2, ShieldAlert, Sparkles } from "lucide-react";
 import { Avatar } from "@/components/Avatar";
+import { PakkaStamp } from "@/components/art/Moments";
 import { SpeakButton } from "@/components/SpeakButton";
 import { AgreementTerms, agreementSpeech } from "@/components/worker/AgreementTerms";
 import { Button, ButtonLink, Card, Notice } from "@/components/ui/primitives";
@@ -119,8 +120,11 @@ export default function AgreementPage() {
           </div>
           <SpeakButton text={agreementSpeech(job, lang)} compact />
         </div>
-        <div className="px-4 pt-1 pb-2">
+        <div className="relative px-4 pt-1 pb-2">
           <AgreementTerms job={job} lang={lang} />
+          {["agreed", "done", "paid"].includes(a.status) ? (
+            <PakkaStamp code={a.code} className="absolute right-2 bottom-2 w-40" tone={a.status === "paid" ? "green" : "blue"} />
+          ) : null}
         </div>
         <div className="grid grid-cols-2 gap-px border-t-2 border-dashed border-line bg-line">
           <Party

@@ -1,6 +1,7 @@
 import { Hero } from "@/components/landing/Hero";
+import { MorningStory } from "@/components/landing/MorningStory";
 import { Nav } from "@/components/landing/Nav";
-import { DemoCta, Features, Footer, HowItWorks, Inclusive, Problem, TradeMarquee } from "@/components/landing/Sections";
+import { DemoCta, DesignLedger, FeatureWall, Footer, Personas, PosterWall, SignBand } from "@/components/landing/Sections";
 
 export default function Home() {
   return (
@@ -8,11 +9,12 @@ export default function Home() {
       <Nav />
       <main id="main">
         <Hero />
-        <TradeMarquee />
-        <Problem />
-        <HowItWorks />
-        <Features />
-        <Inclusive />
+        <SignBand />
+        <MorningStory />
+        <Personas />
+        <PosterWall />
+        <FeatureWall />
+        <DesignLedger />
         <DemoCta />
       </main>
       <Footer />

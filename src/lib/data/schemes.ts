@@ -25,7 +25,7 @@ export const DOCS: Record<DocId, { name: L10n; hint: L10n }> = {
   },
   work90: {
     name: { en: "90-day work certificate", hi: "90 दिन काम का प्रमाणपत्र", mr: "90 दिवस कामाचे प्रमाणपत्र" },
-    hint: { en: "From your contractor — your Naka Khata helps prove the days", hi: "ठेकेदार से — आपका नाका खाता दिन साबित करने में मदद करता है", mr: "ठेकेदाराकडून — तुमचा नाका खाता दिवस दाखवायला मदत करतो" },
+    hint: { en: "From your contractor — your RozGhar Khata helps prove the days", hi: "ठेकेदार से — आपका रोज़घर खाता दिन साबित करने में मदद करता है", mr: "ठेकेदाराकडून — तुमचा नाका खाता दिवस दाखवायला मदत करतो" },
   },
   age: {
     name: { en: "Age proof", hi: "उम्र का प्रमाण", mr: "वयाचा पुरावा" },

@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { Check, ChevronDown, Hourglass, MessageSquareText, Star, TriangleAlert } from "lucide-react";
 import { useState } from "react";
 import { Avatar } from "@/components/Avatar";
+import { PakkaStamp } from "@/components/art/Moments";
 import { TradeIcon } from "@/components/icons/TradeIcon";
 import { AgreementTerms } from "@/components/worker/AgreementTerms";
 import { Button, Tag } from "@/components/ui/primitives";
@@ -42,7 +43,7 @@ export function AgreementRow({ a }: { a: Agreement }) {
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       className={cn(
-        "rounded-[1.4rem] border-2 bg-white p-4 shadow-card",
+        "relative rounded-[1.4rem] border-2 bg-white p-4 shadow-card",
         a.status === "requested" ? "border-ink shadow-[0_4px_0_0_var(--color-ink)]" : "border-ink/10",
       )}
     >
@@ -130,6 +131,9 @@ export function AgreementRow({ a }: { a: Agreement }) {
           Terms <ChevronDown className={cn("size-4 transition-transform", open && "rotate-180")} aria-hidden="true" />
         </button>
       </div>
+      {["agreed", "done", "paid"].includes(a.status) ? (
+        <PakkaStamp code={a.code} className="pointer-events-none absolute top-3 right-24 hidden w-28 sm:block" tone={a.status === "paid" ? "green" : "blue"} />
+      ) : null}
       {open ? (
         <div className="mt-2 rounded-2xl bg-paper px-3">
           <AgreementTerms job={job} lang="en" />

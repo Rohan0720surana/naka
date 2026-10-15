@@ -18,7 +18,7 @@ export function LanguageSheet({ open, onClose }: { open: boolean; onClose: () =>
   const setLang = useDemo((s) => s.setLang);
   return (
     <Sheet open={open} onClose={onClose} title={`${translate(lang, "language")} · भाषा`} closeLabel={translate(lang, "close")}>
-      <ul className="grid gap-3">
+      <ul className="grid gap-2.5">
         {LANGS.map((l) => {
           const on = l.id === lang;
           return (
@@ -33,13 +33,13 @@ export function LanguageSheet({ open, onClose }: { open: boolean; onClose: () =>
                 }}
                 aria-pressed={on}
                 className={cn(
-                  "flex w-full items-center justify-between rounded-2xl border-2 px-5 py-4 text-left transition-colors",
+                  "flex min-h-16 w-full items-center justify-between rounded-2xl border-2 px-5 py-3 text-left transition-colors",
                   on ? "border-ink bg-marigold" : "border-line bg-white hover:border-ink/40",
                 )}
               >
                 <span>
                   <span className="block font-display text-2xl font-extrabold">{l.native}</span>
-                  <span className="text-sm text-muted">{l.english}</span>
+                  {l.english !== l.native ? <span className="text-sm text-muted">{l.english}</span> : null}
                 </span>
                 {on ? <Check className="size-7" strokeWidth={3} aria-hidden="true" /> : null}
               </button>

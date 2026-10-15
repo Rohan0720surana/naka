@@ -22,7 +22,7 @@ import type {
   Worker,
 } from "@/lib/types";
 
-export const STORAGE_KEY = "naka-demo";
+export const STORAGE_KEY = "rozghar-demo";
 const STORE_VERSION = 5;
 
 /** Days of work Ramesh logged before the entries shown in his Khata. */
@@ -73,8 +73,8 @@ function jobAlertSms(job: Job): Sms["text"] {
   const unitHi = job.unit === "day" ? "रोज़" : job.unit === "month" ? "महीना" : "पूरा काम";
   const unitEn = job.unit === "day" ? "a day" : job.unit === "month" ? "a month" : "for the job";
   return {
-    hi: `नाका: ${t.work.hi}, ${area.name.hi}। ${money(job.pay)} ${unitHi}, ${hoursRange(job.startHour, job.endHour, "hi")}। ${translate("hi", TIMING_KEY[job.payTiming])}। काम चाहिए तो 1 भेजें।`,
-    en: `NAKA: ${t.work.en}, ${area.name.en}. ${money(job.pay)} ${unitEn}, ${hoursRange(job.startHour, job.endHour, "en")}. ${translate("en", TIMING_KEY[job.payTiming])}. Reply 1 to get this work.`,
+    hi: `रोज़घर: ${t.work.hi}, ${area.name.hi}। ${money(job.pay)} ${unitHi}, ${hoursRange(job.startHour, job.endHour, "hi")}। ${translate("hi", TIMING_KEY[job.payTiming])}। काम चाहिए तो 1 भेजें।`,
+    en: `ROZGHAR: ${t.work.en}, ${area.name.en}. ${money(job.pay)} ${unitEn}, ${hoursRange(job.startHour, job.endHour, "en")}. ${translate("en", TIMING_KEY[job.payTiming])}. Reply 1 to get this work.`,
   };
 }
 
@@ -87,8 +87,8 @@ function seedSms(): Sms[] {
       from: "naka",
       at: now - 1000 * 60 * 60 * 20,
       text: {
-        hi: `नाका: अर्जुन जी, ${SAATHI_NAME} (नाका साथी) ने आपका नाम जोड़ा है। काम आने पर SMS आएगा। मदद के लिए 0 भेजें।`,
-        en: `NAKA: Arjun ji, ${SAATHI_NAME} (Naka Saathi) has added you. You will get work by SMS. Reply 0 for help.`,
+        hi: `रोज़घर: अर्जुन जी, ${SAATHI_NAME} (नाका साथी) ने आपका नाम जोड़ा है। काम आने पर SMS आएगा। मदद के लिए 0 भेजें।`,
+        en: `ROZGHAR: Arjun ji, ${SAATHI_NAME} (Naka Saathi) has added you. You will get work by SMS. Reply 0 for help.`,
       },
     },
     { id: "s1", from: "naka", at: now - 1000 * 60 * 6, text: jobAlertSms(j8), jobId: "j8" },
@@ -433,8 +433,8 @@ export const useDemo = create<DemoState>()(
             const alert = jobAlertSms(job);
             pushSms(
               {
-                hi: `${emp} आपको काम देना चाहते हैं। ${alert.hi.replace("नाका: ", "").replace("काम चाहिए तो 1 भेजें।", "")}हाँ = 1, ना = 2`,
-                en: `${emp} wants to hire you. ${alert.en.replace("NAKA: ", "").replace("Reply 1 to get this work.", "")}Yes = 1, No = 2`,
+                hi: `${emp} आपको काम देना चाहते हैं। ${alert.hi.replace("रोज़घर: ", "").replace("काम चाहिए तो 1 भेजें।", "")}हाँ = 1, ना = 2`,
+                en: `${emp} wants to hire you. ${alert.en.replace("ROZGHAR: ", "").replace("Reply 1 to get this work.", "")}Yes = 1, No = 2`,
               },
               { agreementId: a.id },
             );
@@ -525,7 +525,7 @@ export const useDemo = create<DemoState>()(
           if (a.workerId === SMS_WORKER_ID) {
             pushSms(
               paid
-                ? { hi: "धन्यवाद! पैसा आपके नाका खाते में दर्ज हो गया।", en: "Thank you! The payment is recorded in your Naka Khata." }
+                ? { hi: "धन्यवाद! पैसा आपके रोज़घर खाते में दर्ज हो गया।", en: "Thank you! The payment is recorded in your RozGhar Khata." }
                 : { hi: "शिकायत दर्ज। सुनील पाटिल (नाका साथी) आपसे बात करेंगे। मुफ़्त कानूनी मदद: 15100", en: "Complaint recorded. Sunil Patil (Naka Saathi) will talk to you. Free legal aid: 15100" },
             );
           }
